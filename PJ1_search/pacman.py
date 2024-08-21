@@ -178,6 +178,9 @@ class GameState:
     def getNumFood(self):
         return self.data.food.count()
 
+    def getNumCapsules(self):
+        return len(self.data.capsules)
+
     def getFood(self):
         """
         Returns a Grid of boolean food indicator variables.
@@ -370,14 +373,22 @@ class PacmanRules:
             state.data.food[x][y] = False
             state.data._foodEaten = position
             # TODO: cache numFood?
-            numFood = state.getNumFood()
-            if numFood == 0 and not state.data._lose:
-                state.data.scoreChange += 500
-                state.data._win = True
+            # numFood = state.getNumFood()
+            #Eat all the food
+            # if numFood == 0 and not state.data._lose:
+            #     state.data.scoreChange += 500
+            #     state.data._win = True
         # Eat capsule
         if (position in state.getCapsules()):
             state.data.capsules.remove(position)
             state.data._capsuleEaten = position
+            state.data.scoreChange += 500
+
+            numCapsules = state.getNumCapsules()
+            # Winning check
+            # Eat all the capsules
+            if numCapsules == 0 and not state.data._lose:
+                state.data._win = True
             # Reset all ghosts' scared timers
             for index in range(1, len(state.data.agentStates)):
                 state.data.agentStates[index].scaredTimer = SCARED_TIME
@@ -453,7 +464,7 @@ class GhostRules:
             state.data._eaten[agentIndex] = True
         else:
             if not state.data._win:
-                state.data.scoreChange -= 500
+                # state.data.scoreChange -= 500 # Death penalty
                 state.data._lose = True
 
     collide = staticmethod(collide)
@@ -486,6 +497,21 @@ def parseAgentArgs(str):
             key, val = p, 1
         opts[key] = val
     return opts
+
+def parseGhosts(options, noKeyboard, numGhosts):
+    ghostTypes = options.ghost.split(',')
+    ghostAgents = []
+
+    # Extend the ghostTypes list to match the number of ghosts if necessary
+    while len(ghostTypes) < numGhosts:
+        ghostTypes.extend(ghostTypes)  # Repeat the list
+    ghostTypes = ghostTypes[:numGhosts]  # Trim the list to the exact number of ghosts
+
+    for i, ghostType in enumerate(ghostTypes):
+        ghostClass = loadAgent(ghostType, noKeyboard)
+        ghostAgents.append(ghostClass(i + 1))
+
+    return ghostAgents
 
 def readCommand(argv):
     """
@@ -554,6 +580,7 @@ def readCommand(argv):
     noKeyboard = options.gameToReplay == None and (options.textGraphics or options.quietGraphics)
     pacmanType = loadAgent(options.pacman, noKeyboard)
     agentOpts = parseAgentArgs(options.agentArgs)
+
     if options.numTraining > 0:
         args['numTraining'] = options.numTraining
         if 'numTraining' not in agentOpts: agentOpts['numTraining'] = options.numTraining
@@ -566,8 +593,11 @@ def readCommand(argv):
         options.numIgnore = int(agentOpts['numTrain'])
 
     # Choose a ghost agent
-    ghostType = loadAgent(options.ghost, noKeyboard)
-    args['ghosts'] = [ghostType(i + 1) for i in range(options.numGhosts)]
+    ghostsAgents = parseGhosts(options, noKeyboard, options.numGhosts)
+
+    args['ghosts'] = ghostsAgents
+    print('ghosts -', args['ghosts'])
+
 
     # Choose a display format
     if options.quietGraphics:
@@ -643,12 +673,18 @@ def replayGame(layout, actions, display):
 
 def runGames(layout, pacman, ghosts, display, numGames, record, numTraining=0, catchExceptions=False, timeout=30):
     import __main__
+    import time
     __main__.__dict__['_display'] = display
 
     rules = ClassicGameRules(timeout)
     games = []
+    times = [] # List to store times for each game
+
+    print('numTraining -', numTraining)
 
     for i in range(numGames):
+        start_time = time.time()  # Start the timer
+
         beQuiet = i < numTraining
         if beQuiet:
             # Suppress output and graphics
@@ -660,6 +696,11 @@ def runGames(layout, pacman, ghosts, display, numGames, record, numTraining=0, c
             rules.quiet = False
         game = rules.newGame(layout, pacman, ghosts, gameDisplay, beQuiet, catchExceptions)
         game.run()
+
+        end_time = time.time()  # End the timer
+        game_duration = end_time - start_time
+        times.append(game_duration)  # Record the game duration
+
         if not beQuiet: games.append(game)
 
         if record:
@@ -671,13 +712,18 @@ def runGames(layout, pacman, ghosts, display, numGames, record, numTraining=0, c
             f.close()
 
     if (numGames - numTraining) > 0:
+        # Calculate and print the average time
+        average_time = sum(times) / float(len(times))
         scores = [game.state.getScore() for game in games]
         wins = [game.state.isWin() for game in games]
         winRate = wins.count(True) / float(len(wins))
         print('Average Score:', sum(scores) / float(len(scores)))
         print('Scores:       ', ', '.join([str(score) for score in scores]))
+        print('Times:        ',', '.join([str(round(time, 2)) for time in times]))  # Print individual times rounded to 2 decimal places
+        print('Average Time: ', round(average_time, 2))  # Print average time rounded to 2 decimal places
         print('Win Rate:      %d/%d (%.2f)' % (wins.count(True), len(wins), winRate))
         print('Record:       ', ', '.join([['Loss', 'Win'][int(w)] for w in wins]))
+        print('Scared Time:       ', SCARED_TIME)
 
     return games
 

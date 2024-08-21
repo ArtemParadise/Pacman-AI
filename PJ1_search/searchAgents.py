@@ -110,6 +110,8 @@ class SearchAgent(Agent):
 
         state: a GameState object (pacman.py)
         """
+
+        self.actionIndex = 0
         if self.searchFunction == None: raise Exception("No search function provided for SearchAgent")
         starttime = time.time()
         problem = self.searchType(state)  # Makes a new search problem
@@ -119,6 +121,7 @@ class SearchAgent(Agent):
         if '_expanded' in dir(problem): print('Search nodes expanded: %d' % problem._expanded)
 
     def getAction(self, state):
+
         """
         Returns the next action in the path chosen earlier (in
         registerInitialState).  Return Directions.STOP if there is no further
@@ -126,8 +129,10 @@ class SearchAgent(Agent):
 
         state: a GameState object (pacman.py)
         """
+
         if 'actionIndex' not in dir(self): self.actionIndex = 0
         i = self.actionIndex
+
         self.actionIndex += 1
         if i < len(self.actions):
             return self.actions[i]
@@ -460,6 +465,70 @@ class FoodSearchProblem:
             if self.walls[x][y]:
                 return 999999
             cost += 1
+        return cost
+
+class CapsulesSearchProblem:
+    """
+    A search problem associated with finding a path that collects all of the
+    capsules in a Pacman game.
+
+    A search state in this problem is a tuple (pacmanPosition, capsules) where:
+      pacmanPosition: a tuple (x, y) of integers specifying Pacman's position
+      capsules:       a list of (x, y) tuples specifying remaining capsules
+    """
+
+    def __init__(self, startingGameState):
+        self.startstate = (startingGameState.getPacmanPosition(), startingGameState.getCapsules())
+        self.walls = startingGameState.getWalls()
+        self.startingGameState = startingGameState
+        self._expanded = 0  # DO NOT CHANGE
+        self.heuristicInfo = {}  # A dictionary for the heuristic to store information
+
+    def getStartState(self):
+        return self.startstate
+
+    def isGoalState(self, state):
+        # The goal is to collect all capsules
+        return len(state[1]) == 0
+
+    def getSuccessors(self, state):
+        "Returns successor states, the actions they require, and a cost of 1."
+        successors = []
+        self._expanded += 1  # DO NOT CHANGE
+
+        for direction in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
+            x, y = state[0]
+            dx, dy = Actions.directionToVector(direction)
+            nextx, nexty = int(x + dx), int(y + dy)
+
+            # Check if the next position is within the walls
+            if not self.walls[nextx][nexty]:
+                # Copy the list of capsules
+                nextCapsules = list(state[1])
+
+                # Remove the capsule at the new position if there is one
+                if (nextx, nexty) in nextCapsules:
+                    nextCapsules.remove((nextx, nexty))
+
+                # Append the new state, action, and cost to successors
+                successors.append((((nextx, nexty), nextCapsules), direction, 1))
+
+        return successors
+
+    def getCostOfActions(self, actions):
+        """Returns the cost of a particular sequence of actions. If those actions
+        include an illegal move, return 999999"""
+        x, y = self.getStartState()[0]
+        cost = 0
+
+        for action in actions:
+            # Calculate the next state and see whether it's legal
+            dx, dy = Actions.directionToVector(action)
+            x, y = int(x + dx), int(y + dy)
+            if self.walls[x][y]:
+                return 999999
+            cost += 1
+
         return cost
 
 class AStarFoodSearchAgent(SearchAgent):
