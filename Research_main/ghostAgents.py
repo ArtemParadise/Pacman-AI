@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -20,7 +20,6 @@ from util import manhattanDistance, Counter
 import util
 
 class GhostAgent(Agent):
-
     def __init__(self, index):
         self.index = index
 
@@ -35,6 +34,7 @@ class GhostAgent(Agent):
         "Returns a Counter encoding a distribution over actions from the provided state."
         util.raiseNotDefined()
 
+
 class RandomGhost(GhostAgent):
     "A ghost that chooses a legal action uniformly at random."
 
@@ -44,6 +44,7 @@ class RandomGhost(GhostAgent):
             dist[a] = 1.0
         dist.normalize()
         return dist
+
 
 class DirectionalGhost(GhostAgent):
     "A ghost that prefers to rush Pacman, or flee when scared."
@@ -61,26 +62,32 @@ class DirectionalGhost(GhostAgent):
         isScared = ghostState.scaredTimer > 0
 
         speed = 1
-        if isScared: speed = 0.5
+        if isScared:
+            speed = 0.5
 
-        actionVectors = [Actions.directionToVector(a, speed) for a in legalActions]
+        actionVectors = [Actions.directionToVector(
+                a, speed) for a in legalActions]
         newPositions = [(pos[0] + a[0], pos[1] + a[1]) for a in actionVectors]
         pacmanPosition = state.getPacmanPosition()
 
         # Select best actions given the state
-        distancesToPacman = [manhattanDistance(pos, pacmanPosition) for pos in newPositions]
+        distancesToPacman = [manhattanDistance(
+                pos, pacmanPosition) for pos in newPositions]
         if isScared:
             bestScore = max(distancesToPacman)
             bestProb = self.prob_scaredFlee
         else:
             bestScore = min(distancesToPacman)
             bestProb = self.prob_attack
-        bestActions = [action for action, distance in zip(legalActions, distancesToPacman) if distance == bestScore]
+        bestActions = [action for action, distance in zip(
+                legalActions, distancesToPacman) if distance == bestScore]
 
         # Construct distribution
         dist = util.Counter()
-        for a in bestActions: dist[a] = bestProb / len(bestActions)
-        for a in legalActions: dist[a] += (1 - bestProb) / len(legalActions)
+        for a in bestActions:
+            dist[a] = bestProb / len(bestActions)
+        for a in legalActions:
+            dist[a] += (1 - bestProb) / len(legalActions)
         dist.normalize()
         return dist
 
@@ -173,3 +180,4 @@ class ClydeGhost(GhostAgent):
         for a in bestActions: dist[a] = 1.0 / len(bestActions)
         dist.normalize()
         return dist
+
