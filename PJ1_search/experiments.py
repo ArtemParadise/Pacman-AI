@@ -62,6 +62,7 @@ if __name__ == '__main__':
 # Setups
 # python3 pacman.py -l originalClassicCaps -p SearchAgent -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost -a fn=bfs,prob=CapsulesSearchProblem -z 0.5
 # python3 pacman.py -l mediumClassicCaps -p SearchAgent -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost -a fn=bfs,prob=CapsulesSearchProblem -z 0.5
+# python3 pacman.py -l mediumClassicCaps -p AStarCapsulesSearchAgent -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost -z 0.5 -n 5
 # python3 pacman.py -l originalClassicCaps -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost
 
 # SCARED_TIME

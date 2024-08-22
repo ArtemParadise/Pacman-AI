@@ -34,6 +34,7 @@ description for details.
 Good luck and happy searching!
 """
 
+from util import manhattanDistance
 from game import Directions
 from game import Agent
 from game import Actions
@@ -269,6 +270,16 @@ def euclideanHeuristic(position, problem, info={}):
     xy1 = position
     xy2 = problem.goal
     return ((xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2) ** 0.5
+
+def capsulesSearchHeuristic(position, problem):
+    pacman_position, capsules = position
+
+    if not capsules:
+        return 0  # No capsules left to collect
+
+    # Compute the minimum distance to the nearest capsule
+    distances = [manhattanDistance(pacman_position, capsule) for capsule in capsules]
+    return min(distances)
 
 #####################################################
 # This portion is incomplete.  Time to write code!  #
@@ -537,6 +548,14 @@ class AStarFoodSearchAgent(SearchAgent):
     def __init__(self):
         self.searchFunction = lambda prob: search.aStarSearch(prob, foodHeuristic)
         self.searchType = FoodSearchProblem
+
+class AStarCapsulesSearchAgent(SearchAgent):
+    "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
+
+    def __init__(self):
+        self.searchFunction = lambda prob: search.aStarSearch(prob, capsulesSearchHeuristic)
+        self.searchType = CapsulesSearchProblem
+
 
 def foodHeuristic(state, problem):
     """
