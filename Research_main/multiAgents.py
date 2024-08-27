@@ -11,10 +11,9 @@
 # Student side autograding was added by Brad Miller, Nick Hay, and
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
-from util import manhattanDistance, Queue, PriorityQueue
-from game import Directions, Actions
-from collections import defaultdict
-from game import Agent
+from util import manhattanDistance
+from game import Directions, Agent
+
 import random, util, math
 
 class ReflexAgent(Agent):
@@ -122,7 +121,7 @@ class MultiAgentSearchAgent(Agent):
     is another abstract class.
     """
 
-    def __init__(self, evalFn='scoreEvaluationFunction', depth='2', numSimulations='3'):
+    def __init__(self, evalFn='scoreEvaluationFunction', depth='2', numSimulations='100'):
         print("eval -", evalFn)
         print("depth -", depth)
         print("numSimulations -", numSimulations)
@@ -468,107 +467,6 @@ class CapsulesAlphaBetaAgent(MultiAgentSearchAgent):
         return minValue
 
 
-class MCTSAgent(MultiAgentSearchAgent):
-    """
-    Monte Carlo Tree Search (MCTS) agent using the evaluation function specified via command line arguments.
-    """
-
-    def getAction(self, gameState):
-        """
-        Perform MCTS to get the best action.
-        """
-        root = MCTSNode(gameState)
-        for _ in range(self.numSimulations):
-            leaf = self.tree_policy(root)
-            reward = self.simulate(leaf)
-            self.backpropagate(leaf, reward)
-
-        # Choose the action with the highest visit count from the root
-        best_action = max(root.children, key=lambda child: child.visits).action
-        return best_action
-
-    def tree_policy(self, node):
-        """
-        Select a node to expand. Uses UCB1 to balance exploration and exploitation.
-        """
-        current_node = node
-        while not current_node.is_terminal():
-            if not current_node.is_fully_expanded():
-                return self.expand(current_node)
-            else:
-                current_node = self.best_uct_child(current_node)
-        return current_node
-
-    def expand(self, node):
-        """
-        Expand the given node by adding one of its child nodes.
-        """
-        action = node.untried_actions().pop()
-        successor = node.gameState.generateSuccessor(0, action)
-        child_node = MCTSNode(successor, parent=node, action=action)
-        node.add_child(child_node)
-        return child_node
-
-    def simulate(self, node):
-        """
-        Simulate a random game from the given node and return the reward.
-        """
-        current_state = node.gameState
-        while not current_state.isWin() and not current_state.isLose():
-            legal_actions = current_state.getLegalActions(0)
-            action = random.choice(legal_actions)
-            current_state = current_state.generateSuccessor(0, action)
-        return self.evaluationFunction(current_state)
-
-    def backpropagate(self, node, reward):
-        """
-        Backpropagate the reward from the given node to the root.
-        """
-        while node is not None:
-            node.visits += 1
-            node.total_reward += reward
-            node = node.parent
-
-    def best_uct_child(self, node):
-        """
-        Select the child with the highest Upper Confidence Bound for Trees (UCT).
-        """
-        best_child = None
-        best_value = -float('inf')
-        for child in node.children:
-            exploitation = child.total_reward / child.visits
-            exploration = math.sqrt(2 * math.log(node.visits) / child.visits)
-            uct_value = exploitation + exploration
-            if uct_value > best_value:
-                best_value = uct_value
-                best_child = child
-        return best_child
-
-
-class MCTSNode:
-    def __init__(self, gameState, parent=None, action=None):
-        self.gameState = gameState
-        self.parent = parent
-        self.action = action
-        self.children = []
-        self.visits = 0
-        self.total_reward = 0
-        self.untried_actions_list = None  # Lazy initialization for untried actions
-
-    def add_child(self, child):
-        self.children.append(child)
-
-    def is_terminal(self):
-        return self.gameState.isWin() or self.gameState.isLose()
-
-    def is_fully_expanded(self):
-        return len(self.untried_actions()) == 0
-
-    def untried_actions(self):
-        if self.untried_actions_list is None:
-            self.untried_actions_list = self.gameState.getLegalActions(0)
-        return self.untried_actions_list
-
 def betterEvaluationFunction(currentGameState):
     """
       Your extreme ghost-hunting, pellet-nabbing, food-gobbling, unstoppable
@@ -667,9 +565,9 @@ def capsulesEvaluationMCTSFunction(currentGameState):
     # Constants
     INF = 100000000.0  # Infinite value
     WEIGHT_FOOD = 5.0  # Reduced Food base value
-    WEIGHT_GHOST = -50.0  # Increased Ghost base value
-    WEIGHT_SCARED_GHOST = 100.0  # Scared ghost base value
-    WEIGHT_CAPSULE = 60.0  # Increased Capsule base value
+    WEIGHT_GHOST = -500.0  # Increased Ghost base value
+    WEIGHT_SCARED_GHOST = 150.0  # Scared ghost base value
+    WEIGHT_CAPSULE = 450.0  # Increased Capsule base value
 
     # Base on gameState.getScore()
     score = currentGameState.getScore()
@@ -699,19 +597,121 @@ def capsulesEvaluationMCTSFunction(currentGameState):
 
     return score
 
-def best_uct_child(self, node):
-    """
-    Select the child with the highest Upper Confidence Bound for Trees (UCT).
-    """
-    best_child = None
-    best_value = -float('inf')
-    for child in node.children:
-        value = child.total_reward / (child.visits + 1e-6) + \
-                (math.sqrt(2) * (2 * math.log(node.visits + 1) / (child.visits + 1e-6)) ** 0.5)
-        if value > best_value:
-            best_value = value
-            best_child = child
-    return best_child
-
 # Abbreviation
 mctsbetter = capsulesEvaluationMCTSFunction
+
+class MCTSAgentWithHeuristic(MultiAgentSearchAgent):
+    """
+    Monte Carlo Tree Search (MCTS) agent using a combined approach with both heuristic and evaluation function.
+    """
+
+    def __init__(self, evalFn='capsulesEvaluationFunction', depth='2', numSimulations=300):
+        super().__init__(evalFn, depth)
+        self.numSimulations = numSimulations
+
+    def getAction(self, gameState):
+        root = Node(gameState)
+        for _ in range(self.numSimulations):
+            leaf = self.select(root)
+            reward = self.simulate(leaf)
+            self.backpropagate(leaf, reward)
+
+        best_action = max(root.children, key=lambda child: child.visits).action
+        return best_action
+
+    def select(self, node):
+        """
+        Traverse the tree from the root to a leaf node using UCB1 policy.
+        """
+        current_node = node
+        while not current_node.is_terminal() and current_node.is_fully_expanded():
+            current_node = self.best_uct_child(current_node)
+        return self.expand(current_node)
+
+    def expand(self, node):
+        """
+        Expand the given node by adding one of its child nodes.
+        """
+        if not node.is_fully_expanded():
+            action = random.choice(node.untried_actions())
+            successor = node.gameState.generateSuccessor(0, action)
+            child_node = Node(successor, parent=node, action=action)
+            node.add_child(child_node)
+            return child_node
+        return node
+
+    def simulate(self, node):
+        current_state = node.gameState
+
+        score = self.evaluationFunction(current_state)
+        reward = self.heuristic(current_state) + score
+
+        return reward
+
+    def backpropagate(self, node, reward):
+        """
+        Backpropagate the reward from the given node to the root.
+        """
+        current_node = node
+        while current_node is not None:
+            current_node.visits += 1
+            current_node.total_reward += reward
+            current_node = current_node.parent
+
+    def best_uct_child(self, node):
+        """
+        Select the child with the highest Upper Confidence Bound for Trees (UCT).
+        """
+        best_child = None
+        best_value = -float('inf')
+        for child in node.children:
+            value = child.total_reward / (child.visits + 1e-6) + \
+                    (2 * (2 * math.log(node.visits + 1) / (child.visits + 1e-6)) ** 0.5)
+            if value > best_value:
+                best_value = value
+                best_child = child
+        return best_child
+
+    def heuristic(self, gameState):
+        """
+        Heuristic function to guide the MCTS simulations.
+        """
+        newPos = gameState.getPacmanPosition()
+        ghosts = gameState.getGhostPositions()
+        capsules = gameState.getCapsules()
+        food = gameState.getFood().asList()
+
+        # Avoid ghosts
+        ghost_penalty = sum([-50 / (util.manhattanDistance(newPos, ghost) + 1) for ghost in ghosts])
+
+        # Prioritize capsules
+        capsule_reward = sum([100 / (util.manhattanDistance(newPos, cap) + 1) for cap in capsules])
+
+        # Consider food
+        food_reward = sum([10 / (util.manhattanDistance(newPos, f) + 1) for f in food])
+
+        return ghost_penalty + capsule_reward + food_reward
+
+
+class Node:
+    def __init__(self, gameState, parent=None, action=None):
+        self.gameState = gameState
+        self.parent = parent
+        self.action = action
+        self.children = []
+        self.visits = 0
+        self.total_reward = 0
+
+    def add_child(self, child):
+        self.children.append(child)
+
+    def is_terminal(self):
+        return self.gameState.isWin() or self.gameState.isLose()
+
+    def is_fully_expanded(self):
+        return len(self.untried_actions()) == 0
+
+    def untried_actions(self):
+        return [action for action in self.gameState.getLegalActions(0) if
+                action not in [child.action for child in self.children]]
+
