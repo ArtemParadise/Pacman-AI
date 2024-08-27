@@ -391,7 +391,6 @@ class CapsulesExpectimaxAgent(MultiAgentSearchAgent):
 
         return totalValue / numAction
 
-
 class CapsulesAlphaBetaAgent(MultiAgentSearchAgent):
     """
     Alpha-Beta Pruning agent that uses the evaluation function specified via command line arguments.
@@ -466,7 +465,6 @@ class CapsulesAlphaBetaAgent(MultiAgentSearchAgent):
 
         return minValue
 
-
 def betterEvaluationFunction(currentGameState):
     """
       Your extreme ghost-hunting, pellet-nabbing, food-gobbling, unstoppable
@@ -504,9 +502,6 @@ def betterEvaluationFunction(currentGameState):
             return -INF  # Pacman is dead at this point
 
     return score
-
-# Abbreviation
-better = betterEvaluationFunction
 
 def capsulesEvaluationFunction(currentGameState):
     """
@@ -551,9 +546,6 @@ def capsulesEvaluationFunction(currentGameState):
 
     return score
 
-# Abbreviation
-cbetter = capsulesEvaluationFunction
-
 def capsulesEvaluationMCTSFunction(currentGameState):
     """
     Evaluation function that balances capsule consumption with ghost avoidance.
@@ -596,9 +588,6 @@ def capsulesEvaluationMCTSFunction(currentGameState):
             return -INF  # Pacman is dead at this point
 
     return score
-
-# Abbreviation
-mctsbetter = capsulesEvaluationMCTSFunction
 
 class MCTSAgentWithHeuristic(MultiAgentSearchAgent):
     """
@@ -692,7 +681,6 @@ class MCTSAgentWithHeuristic(MultiAgentSearchAgent):
 
         return ghost_penalty + capsule_reward + food_reward
 
-
 class Node:
     def __init__(self, gameState, parent=None, action=None):
         self.gameState = gameState
@@ -715,3 +703,7 @@ class Node:
         return [action for action in self.gameState.getLegalActions(0) if
                 action not in [child.action for child in self.children]]
 
+# Abbreviations
+better = betterEvaluationFunction
+cbetter = capsulesEvaluationFunction
+mctsbetter = capsulesEvaluationMCTSFunction
