@@ -11,12 +11,11 @@
 # Student side autograding was added by Brad Miller, Nick Hay, and
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
-
-from util import manhattanDistance
-from game import Directions
-import random, util
-
+from util import manhattanDistance, Queue, PriorityQueue
+from game import Directions, Actions
+from collections import defaultdict
 from game import Agent
+import random, util, math
 
 class ReflexAgent(Agent):
     """
@@ -123,10 +122,14 @@ class MultiAgentSearchAgent(Agent):
     is another abstract class.
     """
 
-    def __init__(self, evalFn='scoreEvaluationFunction', depth='2'):
+    def __init__(self, evalFn='scoreEvaluationFunction', depth='2', numSimulations='3'):
+        print("eval -", evalFn)
+        print("depth -", depth)
+        print("numSimulations -", numSimulations)
         self.index = 0  # Pacman is always agent index 0
         self.evaluationFunction = util.lookup(evalFn, globals())
         self.depth = int(depth)
+        self.numSimulations = int(numSimulations)
 
 class MinimaxAgent(MultiAgentSearchAgent):
     """
@@ -336,6 +339,235 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
 
         return totalValue / numAction
 
+class CapsulesExpectimaxAgent(MultiAgentSearchAgent):
+    """
+    Your modified expectimax agent to prioritize eating capsules.
+    """
+    INF = 100000.0
+
+    def getAction(self, gameState):
+        """
+        Returns the expectimax action using self.depth and self.evaluationFunction
+        All ghosts should be modeled as choosing uniformly at random from their
+        legal moves.
+        """
+        maxValue = -self.INF
+        maxAction = Directions.STOP
+
+        for action in gameState.getLegalActions(agentIndex=0):
+            sucState = gameState.generateSuccessor(action=action, agentIndex=0)
+            sucValue = self.expNode(sucState, currentDepth=0, agentIndex=1)
+            if sucValue > maxValue:
+                maxValue = sucValue
+                maxAction = action
+
+        return maxAction
+
+    def maxNode(self, gameState, currentDepth):
+        if currentDepth == self.depth or gameState.isLose() or gameState.isWin():
+            return self.evaluationFunction(gameState)  # Use the new evaluation function
+
+        maxValue = -self.INF
+        for action in gameState.getLegalActions(agentIndex=0):
+            sucState = gameState.generateSuccessor(action=action, agentIndex=0)
+            sucValue = self.expNode(sucState, currentDepth=currentDepth, agentIndex=1)
+            if sucValue > maxValue:
+                maxValue = sucValue
+        return maxValue
+
+    def expNode(self, gameState, currentDepth, agentIndex):
+        if currentDepth == self.depth or gameState.isLose() or gameState.isWin():
+            return self.evaluationFunction(gameState)  # Use the new evaluation function
+
+        numAction = len(gameState.getLegalActions(agentIndex=agentIndex))
+        totalValue = 0.0
+        numAgent = gameState.getNumAgents()
+        for action in gameState.getLegalActions(agentIndex=agentIndex):
+            sucState = gameState.generateSuccessor(agentIndex=agentIndex, action=action)
+            if agentIndex == numAgent - 1:
+                sucValue = self.maxNode(sucState, currentDepth=currentDepth + 1)
+            else:
+                sucValue = self.expNode(sucState, currentDepth=currentDepth, agentIndex=agentIndex + 1)
+            totalValue += sucValue
+
+        return totalValue / numAction
+
+
+class CapsulesAlphaBetaAgent(MultiAgentSearchAgent):
+    """
+    Alpha-Beta Pruning agent that uses the evaluation function specified via command line arguments.
+    """
+    INF = 100000.0
+
+    def getAction(self, gameState):
+        """
+        Returns the alpha-beta pruning action using self.depth and self.evaluationFunction.
+        """
+        alpha = -self.INF
+        beta = self.INF
+        bestValue = -self.INF
+        bestAction = Directions.STOP
+
+        for action in gameState.getLegalActions(0):
+            successor = gameState.generateSuccessor(0, action)
+            value = self.alphaBetaPrune(successor, self.depth - 1, alpha, beta, 1)
+            if value > bestValue:
+                bestValue = value
+                bestAction = action
+            if bestValue > beta:
+                break
+            alpha = max(alpha, bestValue)
+
+        return bestAction
+
+    def alphaBetaPrune(self, gameState, depth, alpha, beta, agentIndex):
+        """
+        The recursive alpha-beta pruning function.
+        """
+        # Terminal condition: max depth or terminal state
+        if depth == 0 or gameState.isLose() or gameState.isWin():
+            return self.evaluationFunction(gameState)
+
+        if agentIndex == 0:  # Pacman's turn (maximizing player)
+            return self.maxNode(gameState, depth, alpha, beta, agentIndex)
+        else:  # Ghost's turn (minimizing player)
+            return self.minNode(gameState, depth, alpha, beta, agentIndex)
+
+    def maxNode(self, gameState, depth, alpha, beta, agentIndex):
+        """
+        Max node for alpha-beta pruning.
+        """
+        maxValue = -self.INF
+
+        for action in gameState.getLegalActions(agentIndex):
+            successor = gameState.generateSuccessor(agentIndex, action)
+            value = self.alphaBetaPrune(successor, depth - 1, alpha, beta, (agentIndex + 1) % gameState.getNumAgents())
+            if value > maxValue:
+                maxValue = value
+            if maxValue > beta:
+                return maxValue
+            alpha = max(alpha, maxValue)
+
+        return maxValue
+
+    def minNode(self, gameState, depth, alpha, beta, agentIndex):
+        """
+        Min node for alpha-beta pruning.
+        """
+        minValue = self.INF
+
+        for action in gameState.getLegalActions(agentIndex):
+            successor = gameState.generateSuccessor(agentIndex, action)
+            value = self.alphaBetaPrune(successor, depth - 1, alpha, beta, (agentIndex + 1) % gameState.getNumAgents())
+            if value < minValue:
+                minValue = value
+            if minValue < alpha:
+                return minValue
+            beta = min(beta, minValue)
+
+        return minValue
+
+
+class MCTSAgent(MultiAgentSearchAgent):
+    """
+    Monte Carlo Tree Search (MCTS) agent using the evaluation function specified via command line arguments.
+    """
+
+    def getAction(self, gameState):
+        """
+        Perform MCTS to get the best action.
+        """
+        root = MCTSNode(gameState)
+        for _ in range(self.numSimulations):
+            leaf = self.tree_policy(root)
+            reward = self.simulate(leaf)
+            self.backpropagate(leaf, reward)
+
+        # Choose the action with the highest visit count from the root
+        best_action = max(root.children, key=lambda child: child.visits).action
+        return best_action
+
+    def tree_policy(self, node):
+        """
+        Select a node to expand. Uses UCB1 to balance exploration and exploitation.
+        """
+        current_node = node
+        while not current_node.is_terminal():
+            if not current_node.is_fully_expanded():
+                return self.expand(current_node)
+            else:
+                current_node = self.best_uct_child(current_node)
+        return current_node
+
+    def expand(self, node):
+        """
+        Expand the given node by adding one of its child nodes.
+        """
+        action = node.untried_actions().pop()
+        successor = node.gameState.generateSuccessor(0, action)
+        child_node = MCTSNode(successor, parent=node, action=action)
+        node.add_child(child_node)
+        return child_node
+
+    def simulate(self, node):
+        """
+        Simulate a random game from the given node and return the reward.
+        """
+        current_state = node.gameState
+        while not current_state.isWin() and not current_state.isLose():
+            legal_actions = current_state.getLegalActions(0)
+            action = random.choice(legal_actions)
+            current_state = current_state.generateSuccessor(0, action)
+        return self.evaluationFunction(current_state)
+
+    def backpropagate(self, node, reward):
+        """
+        Backpropagate the reward from the given node to the root.
+        """
+        while node is not None:
+            node.visits += 1
+            node.total_reward += reward
+            node = node.parent
+
+    def best_uct_child(self, node):
+        """
+        Select the child with the highest Upper Confidence Bound for Trees (UCT).
+        """
+        best_child = None
+        best_value = -float('inf')
+        for child in node.children:
+            exploitation = child.total_reward / child.visits
+            exploration = math.sqrt(2 * math.log(node.visits) / child.visits)
+            uct_value = exploitation + exploration
+            if uct_value > best_value:
+                best_value = uct_value
+                best_child = child
+        return best_child
+
+
+class MCTSNode:
+    def __init__(self, gameState, parent=None, action=None):
+        self.gameState = gameState
+        self.parent = parent
+        self.action = action
+        self.children = []
+        self.visits = 0
+        self.total_reward = 0
+        self.untried_actions_list = None  # Lazy initialization for untried actions
+
+    def add_child(self, child):
+        self.children.append(child)
+
+    def is_terminal(self):
+        return self.gameState.isWin() or self.gameState.isLose()
+
+    def is_fully_expanded(self):
+        return len(self.untried_actions()) == 0
+
+    def untried_actions(self):
+        if self.untried_actions_list is None:
+            self.untried_actions_list = self.gameState.getLegalActions(0)
+        return self.untried_actions_list
 
 def betterEvaluationFunction(currentGameState):
     """
@@ -377,3 +609,109 @@ def betterEvaluationFunction(currentGameState):
 
 # Abbreviation
 better = betterEvaluationFunction
+
+def capsulesEvaluationFunction(currentGameState):
+    """
+    Evaluation function that balances capsule consumption with ghost avoidance.
+    """
+    newPos = currentGameState.getPacmanPosition()
+    capsules = currentGameState.getCapsules()
+    newGhostStates = currentGameState.getGhostStates()
+
+    # Constants
+    INF = 100000000.0  # Infinite value
+    WEIGHT_FOOD = 10.0  # Food base value
+    WEIGHT_GHOST = -30.0  # Ghost base value
+    WEIGHT_SCARED_GHOST = 100.0  # Scared ghost base value
+    WEIGHT_CAPSULE = 30.0  # Capsule base value
+
+    # Base on gameState.getScore()
+    score = currentGameState.getScore()
+
+    # Evaluate the distance to the nearest capsule
+    if capsules:
+        distancesToCapsules = [util.manhattanDistance(newPos, capsule) for capsule in capsules]
+        minDistanceToCapsule = min(distancesToCapsules)
+        score += WEIGHT_CAPSULE / minDistanceToCapsule
+
+    # Evaluate the distance to the closest food
+    newFood = currentGameState.getFood()
+    distancesToFoodList = [util.manhattanDistance(newPos, foodPos) for foodPos in newFood.asList()]
+    if distancesToFoodList:
+        score += WEIGHT_FOOD / min(distancesToFoodList)
+
+    # Evaluate the distance to ghosts
+    for ghost in newGhostStates:
+        distance = manhattanDistance(newPos, ghost.getPosition())
+        if distance > 0:
+            if ghost.scaredTimer > 0:  # If scared, add points
+                score += WEIGHT_SCARED_GHOST / distance
+            else:  # If not, decrease points
+                score += WEIGHT_GHOST / distance
+        else:
+            return -INF  # Pacman is dead at this point
+
+    return score
+
+# Abbreviation
+cbetter = capsulesEvaluationFunction
+
+def capsulesEvaluationMCTSFunction(currentGameState):
+    """
+    Evaluation function that balances capsule consumption with ghost avoidance.
+    """
+    newPos = currentGameState.getPacmanPosition()
+    capsules = currentGameState.getCapsules()
+    newGhostStates = currentGameState.getGhostStates()
+
+    # Constants
+    INF = 100000000.0  # Infinite value
+    WEIGHT_FOOD = 5.0  # Reduced Food base value
+    WEIGHT_GHOST = -50.0  # Increased Ghost base value
+    WEIGHT_SCARED_GHOST = 100.0  # Scared ghost base value
+    WEIGHT_CAPSULE = 60.0  # Increased Capsule base value
+
+    # Base on gameState.getScore()
+    score = currentGameState.getScore()
+
+    # Evaluate the distance to the nearest capsule
+    if capsules:
+        distancesToCapsules = [util.manhattanDistance(newPos, capsule) for capsule in capsules]
+        minDistanceToCapsule = min(distancesToCapsules)
+        score += WEIGHT_CAPSULE / (minDistanceToCapsule + 1)
+
+    # Evaluate the distance to the closest food
+    newFood = currentGameState.getFood()
+    distancesToFoodList = [util.manhattanDistance(newPos, foodPos) for foodPos in newFood.asList()]
+    if distancesToFoodList:
+        score += WEIGHT_FOOD / (min(distancesToFoodList) + 1)
+
+    # Evaluate the distance to ghosts
+    for ghost in newGhostStates:
+        distance = manhattanDistance(newPos, ghost.getPosition())
+        if distance > 0:
+            if ghost.scaredTimer > 0:  # If scared, add points
+                score += WEIGHT_SCARED_GHOST / distance
+            else:  # If not, decrease points
+                score += WEIGHT_GHOST / distance
+        else:
+            return -INF  # Pacman is dead at this point
+
+    return score
+
+def best_uct_child(self, node):
+    """
+    Select the child with the highest Upper Confidence Bound for Trees (UCT).
+    """
+    best_child = None
+    best_value = -float('inf')
+    for child in node.children:
+        value = child.total_reward / (child.visits + 1e-6) + \
+                (math.sqrt(2) * (2 * math.log(node.visits + 1) / (child.visits + 1e-6)) ** 0.5)
+        if value > best_value:
+            best_value = value
+            best_child = child
+    return best_child
+
+# Abbreviation
+mctsbetter = capsulesEvaluationMCTSFunction

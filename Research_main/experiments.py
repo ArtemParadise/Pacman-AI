@@ -65,5 +65,15 @@ if __name__ == '__main__':
 # python3 pacman.py -l mediumClassicCaps -p AStarCapsulesSearchAgent -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost -z 0.5 -n 5
 # python3 pacman.py -l originalClassicCaps -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost
 
+# Better depth is 2
+# python3 pacman.py -p CapsuleExpectimaxAgent -a evalFn=cbetter,depth=2  -l mediumClassic
+# python3 pacman.py -p CapsulesAlphaBetaAgent -a evalFn=cbetter,depth=2 -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost  -l originalClassic
+# python3 pacman.py -p CapsulesExpectimaxAgent -a evalFn=cbetter,depth=2 -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost  -l mediumClassic
+
+# Potential performance Diferences
+## - depth
+## - layouts
+## - scared time
+
 # SCARED_TIME
 # TIME_PENALTY = 1  # Number of points lost each round
