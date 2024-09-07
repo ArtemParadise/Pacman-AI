@@ -122,9 +122,6 @@ class MultiAgentSearchAgent(Agent):
     """
 
     def __init__(self, evalFn='scoreEvaluationFunction', depth='2', numSimulations='100'):
-        print("eval -", evalFn)
-        print("depth -", depth)
-        print("numSimulations -", numSimulations)
         self.index = 0  # Pacman is always agent index 0
         self.evaluationFunction = util.lookup(evalFn, globals())
         self.depth = int(depth)
@@ -594,9 +591,11 @@ class MCTSAgentWithHeuristic(MultiAgentSearchAgent):
     Monte Carlo Tree Search (MCTS) agent using a combined approach with both heuristic and evaluation function.
     """
 
-    def __init__(self, evalFn='capsulesEvaluationFunction', depth='2', numSimulations=300):
+    def __init__(self, evalFn='capsulesEvaluationFunction', depth='2', numSimulations=300, withEval=True):
         super().__init__(evalFn, depth)
-        self.numSimulations = numSimulations
+        self.numSimulations = int(numSimulations)
+        print("numSimulations -", self.numSimulations)
+        self.withEval = withEval
 
     def getAction(self, gameState):
         root = Node(gameState)
@@ -632,7 +631,10 @@ class MCTSAgentWithHeuristic(MultiAgentSearchAgent):
     def simulate(self, node):
         current_state = node.gameState
 
-        score = self.evaluationFunction(current_state)
+        score = 0
+        if self.withEval:
+            score = self.evaluationFunction(current_state)
+
         reward = self.heuristic(current_state) + score
 
         return reward
@@ -680,6 +682,14 @@ class MCTSAgentWithHeuristic(MultiAgentSearchAgent):
         food_reward = sum([10 / (util.manhattanDistance(newPos, f) + 1) for f in food])
 
         return ghost_penalty + capsule_reward + food_reward
+
+class MCTSAgentWithoutEval(MCTSAgentWithHeuristic):
+    """
+    Monte Carlo Tree Search (MCTS) agent using only heuristic without combination with evaluation function.
+    """
+
+    def __init__(self, evalFn='capsulesEvaluationFunction', depth='2', numSimulations=300, withEval=False):
+        super().__init__(evalFn, depth, numSimulations, withEval)
 
 class Node:
     def __init__(self, gameState, parent=None, action=None):

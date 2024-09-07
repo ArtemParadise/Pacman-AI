@@ -40,6 +40,7 @@ GHOST_COLORS.append(formatColor(.98, .41, .07))  # Orange
 GHOST_COLORS.append(formatColor(.1, .75, .7))  # Green
 GHOST_COLORS.append(formatColor(1.0, 0.6, 0.0))  # Yellow
 GHOST_COLORS.append(formatColor(.4, 0.13, 0.91))  # Purple
+GHOST_COLORS.append(formatColor(1, 0, 0.4))  # Coral
 
 TEAM_COLORS = GHOST_COLORS[:2]
 
@@ -272,7 +273,7 @@ class PacmanGraphics:
         begin_graphics(screen_width,
                        screen_height,
                        BACKGROUND_COLOR,
-                       "CS188 Pacman")
+                       "Pacman Research")
 
     def drawPacman(self, pacman, index):
         position = self.getPosition(pacman)

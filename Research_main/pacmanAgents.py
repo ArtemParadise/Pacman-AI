@@ -107,7 +107,7 @@ class MonteCarloPacmanAgent(Agent):
     def distance(self, pos1, pos2):
         return ((pos1[0] - pos2[0]) ** 2 + (pos1[1] - pos2[1]) ** 2) ** 0.5
 
-class RandomPacmanAgent(Agent):
+class RandomAgent(Agent):
     def __init__(self, optimal_distance=5):
         Agent.__init__(self)
         self.optimal_distance = optimal_distance

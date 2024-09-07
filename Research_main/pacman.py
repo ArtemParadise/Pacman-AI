@@ -45,6 +45,7 @@ from game import Directions
 from game import Actions
 from util import nearestPoint
 from util import manhattanDistance
+from experimentLogger import ExperimentLogger
 import util
 import layout
 import sys
@@ -118,6 +119,7 @@ class GameState:
         # Time passes
         if agentIndex == 0:
             state.data.scoreChange += -TIME_PENALTY  # Penalty for waiting around
+
         else:
             GhostRules.decrementTimer(state.data.agentStates[agentIndex])
 
@@ -127,6 +129,11 @@ class GameState:
         # Book keeping
         state.data._agentMoved = agentIndex
         state.data.score += state.data.scoreChange
+
+        # Prevent cycling
+        if state.data.score < -10:
+            state.data._lose = True
+
         GameState.explored.add(self)
         GameState.explored.add(state)
         return state
@@ -270,7 +277,7 @@ class GameState:
 ############################################################################
 
 
-SCARED_TIME = 40  # Moves ghosts are scared
+SCARED_TIME = 10  # Moves ghosts are scared
 COLLISION_TOLERANCE = 0.7  # How close ghosts must be to Pacman to kill
 TIME_PENALTY = 1  # Number of points lost each round
 
@@ -624,6 +631,11 @@ def readCommand(argv):
     args['record'] = options.record
     args['catchExceptions'] = options.catchExceptions
     args['timeout'] = options.timeout
+    args['layoutName'] = options.layout
+    args['pacmanAgentType'] = options.pacman
+
+    if 'numSimulations' in agentOpts:
+        args['numSimulations'] = agentOpts['numSimulations']
 
     # Special case: recorded games don't use the runGames method or args structure
     if options.gameToReplay != None:
@@ -688,10 +700,15 @@ def replayGame(layout, actions, display):
 
     display.finish()
 
-def runGames(layout, pacman, ghosts, display, numGames, record, numTraining=0, catchExceptions=False, timeout=30):
+def runGames(layout, pacman, ghosts, display, numGames, record, numTraining=0, catchExceptions=False, timeout=30, layoutName='', pacmanAgentType='', numSimulations=''):
     import __main__
     import time
     __main__.__dict__['_display'] = display
+
+    logFileName = f'{pacmanAgentType}.txt'
+    logFileDir = f'{layoutName}'
+    logFilePath= os.path.join('experiment_logs', logFileDir, logFileName)
+    logger = ExperimentLogger(logFilePath)
 
     rules = ClassicGameRules(timeout)
     games = []
@@ -738,13 +755,19 @@ def runGames(layout, pacman, ghosts, display, numGames, record, numTraining=0, c
         scores = [game.state.getScore() for game in games]
         wins = [game.state.isWin() for game in games]
         winRate = wins.count(True) / float(len(wins))
-        print('Average Score:', sum(scores) / float(len(scores)))
-        print('Scores:       ', ', '.join([str(score) for score in scores]))
-        print('Times:        ',', '.join([str(round(time, 2)) for time in times]))  # Print individual times rounded to 2 decimal places
-        print('Average Time: ', round(average_time, 2))  # Print average time rounded to 2 decimal places
-        print('Win Rate:      %d/%d (%.2f)' % (wins.count(True), len(wins), winRate))
-        print('Record:       ', ', '.join([['Loss', 'Win'][int(w)] for w in wins]))
-        print('Scared Time:       ', SCARED_TIME)
+
+        print('Layout Name:     ', layoutName)
+        print('Pacman:          ', pacmanAgentType)
+        print('Number of Games: ', numGames)
+        print('Average Score:   ', sum(scores) / float(len(scores)))
+        print('Scores:          ', ', '.join([str(score) for score in scores]))
+        print('Times:           ',', '.join([str(round(time, 2)) for time in times]))  # Print individual times rounded to 2 decimal places
+        print('Average Time:    ', round(average_time, 2))  # Print average time rounded to 2 decimal places
+        print('Win Rate:         %d/%d (%.2f)' % (wins.count(True), len(wins), winRate))
+        print('Record:          ', ', '.join([['Loss', 'Win'][int(w)] for w in wins]))
+        print('Scared Time:     ', SCARED_TIME)
+
+        logger.log(layoutName, pacmanAgentType, numGames, scores, times, wins, SCARED_TIME, numSimulations)
 
     return games
 
