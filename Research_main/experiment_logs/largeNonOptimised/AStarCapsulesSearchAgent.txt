@@ -1,0 +1,47 @@
+Maze Name:          largeNonOptimised
+Pacman Agent Type:  AStarCapsulesSearchAgent
+Number of Games:    3
+Average Score:      3281.67
+Scores:             3415.0, 3415.0, 3015.0
+Times:              16.88, 16.71, 18.03
+Average Time:       17.21
+Win Rate:           3/3 (100.00%)
+Record:             Win, Win, Win
+Scared Time:        20
+----------------------------------------
+Maze Name:          largeNonOptimised
+Pacman Agent Type:  AStarCapsulesSearchAgent
+Number of Games:    1
+Average Score:      3215.00
+Scores:             3215.0
+Times:              17.33
+Average Time:       17.33
+Win Rate:           1/1 (100.00%)
+Record:             Win
+Scared Time:        10
+Num Simulations:    
+----------------------------------------
+Maze Name:          largeNonOptimised
+Pacman Agent Type:  AStarCapsulesSearchAgent
+Number of Games:    1
+Average Score:      2028.00
+Scores:             2028.0
+Times:              11.33
+Average Time:       11.33
+Win Rate:           0/1 (0.00%)
+Record:             Loss
+Scared Time:        10
+Num Simulations:    
+----------------------------------------
+Maze Name:          largeNonOptimised
+Pacman Agent Type:  AStarCapsulesSearchAgent
+Number of Games:    100
+Average Score:      2854.78
+Scores:             3415.0, 3015.0, 3015.0, 3015.0, 3215.0, 3015.0, 2019.0, 3015.0, 3015.0, 3015.0, 3015.0, 3215.0, 3015.0, 3015.0, 3015.0, 2028.0, 3215.0, 3015.0, 3015.0, 3215.0, 2028.0, 3015.0, 3015.0, 2055.0, 3015.0, 2019.0, 3015.0, 2028.0, 2028.0, 3015.0, 2028.0, 3215.0, 3015.0, 2428.0, 3215.0, 3015.0, 3015.0, 3215.0, 3015.0, 3215.0, 3015.0, 3015.0, 3015.0, 1855.0, 3015.0, 2055.0, 3015.0, 3215.0, 3215.0, 3015.0, 2028.0, 3015.0, 3215.0, 3015.0, 3215.0, 3015.0, 2091.0, 3015.0, 3215.0, 3015.0, 3015.0, 3015.0, 2028.0, 3615.0, 3015.0, 2091.0, 3415.0, 2028.0, 3015.0, 3015.0, 2010.0, 3215.0, 3015.0, 3215.0, 3215.0, 3415.0, 1855.0, 3015.0, 2028.0, 3015.0, 3215.0, 3215.0, 3015.0, 1918.0, 3015.0, 3215.0, 3015.0, 3015.0, 3015.0, 3015.0, 2019.0, 3215.0, 3215.0, 3215.0, 3215.0, 2028.0, 3015.0, 3015.0, 3015.0, 2228.0
+Times:              16.93, 16.71, 16.36, 16.9, 16.42, 16.92, 11.0, 16.73, 16.48, 16.48, 16.23, 16.41, 16.18, 16.51, 16.42, 11.2, 16.6, 16.32, 17.0, 16.27, 11.65, 16.34, 16.22, 11.87, 16.42, 11.14, 16.26, 11.72, 11.19, 17.19, 11.24, 16.47, 16.41, 11.35, 16.71, 16.42, 16.45, 16.58, 16.74, 16.45, 16.49, 16.5, 16.59, 11.95, 16.43, 11.88, 16.3, 16.93, 16.62, 16.5, 14.8, 16.46, 16.44, 16.54, 16.51, 16.45, 12.99, 16.49, 17.01, 16.49, 16.36, 16.53, 11.2, 17.01, 16.43, 12.92, 16.97, 11.17, 16.41, 16.11, 11.1, 16.58, 16.58, 16.56, 16.39, 16.68, 11.78, 16.86, 11.21, 16.76, 16.73, 16.61, 16.58, 13.57, 16.38, 16.43, 16.47, 16.37, 16.34, 16.88, 11.03, 16.5, 16.66, 16.56, 16.84, 11.29, 16.3, 16.38, 16.23, 11.27
+Average Time:       15.44
+Win Rate:           77/100 (77.00%)
+Record:             Win, Win, Win, Win, Win, Win, Loss, Win, Win, Win, Win, Win, Win, Win, Win, Loss, Win, Win, Win, Win, Loss, Win, Win, Loss, Win, Loss, Win, Loss, Loss, Win, Loss, Win, Win, Loss, Win, Win, Win, Win, Win, Win, Win, Win, Win, Loss, Win, Loss, Win, Win, Win, Win, Loss, Win, Win, Win, Win, Win, Loss, Win, Win, Win, Win, Win, Loss, Win, Win, Loss, Win, Loss, Win, Win, Loss, Win, Win, Win, Win, Win, Loss, Win, Loss, Win, Win, Win, Win, Loss, Win, Win, Win, Win, Win, Win, Loss, Win, Win, Win, Win, Loss, Win, Win, Win, Loss
+Scared Time:        10
+Num Simulations:    
+----------------------------------------

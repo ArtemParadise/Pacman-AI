@@ -1,0 +1,47 @@
+Maze Name:          smallNonOptimised
+Pacman Agent Type:  BFSCapsulesSearchAgent
+Number of Games:    3
+Average Score:      1018.33
+Scores:             1121.0, 813.0, 1121.0
+Times:              3.83, 3.46, 3.7
+Average Time:       3.66
+Win Rate:           2/3 (66.67%)
+Record:             Win, Loss, Win
+Scared Time:        20
+----------------------------------------
+Maze Name:          smallNonOptimised
+Pacman Agent Type:  BFSCapsulesSearchAgent
+Number of Games:    1
+Average Score:      1121.00
+Scores:             1121.0
+Times:              3.74
+Average Time:       3.74
+Win Rate:           1/1 (100.00%)
+Record:             Win
+Scared Time:        10
+Num Simulations:    
+----------------------------------------
+Maze Name:          smallNonOptimised
+Pacman Agent Type:  BFSCapsulesSearchAgent
+Number of Games:    100
+Average Score:      973.16
+Scores:             1121.0, 1121.0, 1121.0, 1121.0, 1121.0, 1121.0, 1121.0, 1121.0, 813.0, 1121.0, 813.0, 1121.0, 813.0, 813.0, 1121.0, 1121.0, 813.0, 1121.0, 813.0, 1121.0, 813.0, 1121.0, 813.0, 1121.0, 813.0, 813.0, 813.0, 1121.0, 1121.0, 813.0, 813.0, 813.0, 1121.0, 813.0, 813.0, 1121.0, 1121.0, 813.0, 813.0, 813.0, 813.0, 813.0, 1121.0, 813.0, 813.0, 1121.0, 1121.0, 813.0, 1121.0, 1121.0, 1121.0, 813.0, 813.0, 813.0, 813.0, 1121.0, 813.0, 1121.0, 813.0, 1121.0, 1121.0, 813.0, 1121.0, 1121.0, 813.0, 813.0, 813.0, 1121.0, 1121.0, 813.0, 1121.0, 1121.0, 1121.0, 1121.0, 813.0, 1121.0, 1121.0, 813.0, 1121.0, 813.0, 1121.0, 813.0, 1121.0, 1121.0, 1121.0, 1121.0, 1121.0, 813.0, 813.0, 1121.0, 813.0, 813.0, 813.0, 1121.0, 1121.0, 813.0, 1121.0, 813.0, 813.0, 813.0
+Times:              3.78, 3.79, 3.77, 3.78, 3.8, 3.8, 3.78, 3.78, 3.53, 3.8, 3.52, 3.85, 3.56, 3.53, 3.78, 3.79, 3.52, 3.78, 3.53, 3.78, 3.52, 3.79, 3.5, 3.77, 3.53, 3.51, 3.53, 3.78, 3.75, 3.55, 3.54, 3.49, 3.79, 3.53, 3.52, 3.8, 3.79, 3.49, 3.52, 3.49, 3.51, 3.52, 3.78, 3.52, 3.52, 3.79, 3.78, 3.53, 3.74, 3.77, 3.8, 3.53, 3.5, 3.53, 3.53, 3.76, 3.53, 3.78, 3.49, 3.79, 3.8, 3.48, 3.77, 3.79, 3.48, 3.52, 3.52, 3.76, 3.79, 3.55, 3.73, 3.79, 3.79, 3.74, 3.54, 3.8, 3.74, 3.51, 3.78, 3.49, 3.79, 3.53, 3.74, 3.81, 3.77, 3.73, 3.81, 3.53, 3.47, 3.79, 3.54, 3.48, 3.51, 3.82, 3.8, 3.53, 3.79, 3.5, 3.52, 3.53
+Average Time:       3.66
+Win Rate:           52/100 (52.00%)
+Record:             Win, Win, Win, Win, Win, Win, Win, Win, Loss, Win, Loss, Win, Loss, Loss, Win, Win, Loss, Win, Loss, Win, Loss, Win, Loss, Win, Loss, Loss, Loss, Win, Win, Loss, Loss, Loss, Win, Loss, Loss, Win, Win, Loss, Loss, Loss, Loss, Loss, Win, Loss, Loss, Win, Win, Loss, Win, Win, Win, Loss, Loss, Loss, Loss, Win, Loss, Win, Loss, Win, Win, Loss, Win, Win, Loss, Loss, Loss, Win, Win, Loss, Win, Win, Win, Win, Loss, Win, Win, Loss, Win, Loss, Win, Loss, Win, Win, Win, Win, Win, Loss, Loss, Win, Loss, Loss, Loss, Win, Win, Loss, Win, Loss, Loss, Loss
+Scared Time:        10
+Num Simulations:    
+----------------------------------------
+Maze Name:          smallNonOptimised
+Pacman Agent Type:  BFSCapsulesSearchAgent
+Number of Games:    100
+Average Score:      936.20
+Scores:             1121.0, 813.0, 813.0, 813.0, 813.0, 1121.0, 813.0, 1121.0, 1121.0, 813.0, 813.0, 1121.0, 813.0, 813.0, 1121.0, 813.0, 1121.0, 1121.0, 813.0, 813.0, 813.0, 1121.0, 813.0, 1121.0, 813.0, 813.0, 813.0, 813.0, 1121.0, 1121.0, 1121.0, 813.0, 813.0, 1121.0, 1121.0, 1121.0, 1121.0, 1121.0, 813.0, 813.0, 1121.0, 813.0, 813.0, 813.0, 813.0, 1121.0, 813.0, 813.0, 813.0, 813.0, 813.0, 813.0, 813.0, 1121.0, 813.0, 813.0, 1121.0, 813.0, 1121.0, 813.0, 813.0, 813.0, 1121.0, 813.0, 813.0, 813.0, 813.0, 1121.0, 1121.0, 1121.0, 813.0, 1121.0, 1121.0, 813.0, 1121.0, 813.0, 1121.0, 813.0, 813.0, 1121.0, 1121.0, 813.0, 1121.0, 813.0, 813.0, 813.0, 813.0, 1121.0, 813.0, 1121.0, 1121.0, 813.0, 1121.0, 813.0, 813.0, 813.0, 1121.0, 1121.0, 813.0, 813.0
+Times:              3.72, 3.47, 3.47, 3.49, 3.51, 3.75, 3.48, 3.73, 3.73, 3.48, 3.47, 3.72, 3.46, 3.49, 3.74, 3.46, 3.74, 3.74, 3.49, 3.46, 3.47, 3.68, 3.47, 3.72, 3.42, 3.49, 3.48, 3.44, 3.73, 3.75, 3.72, 3.45, 3.5, 3.67, 3.7, 3.7, 3.68, 3.74, 3.39, 3.43, 3.73, 3.52, 3.48, 3.47, 3.48, 3.74, 3.49, 3.52, 3.48, 3.53, 3.51, 3.48, 3.47, 3.74, 3.5, 3.46, 3.74, 3.49, 3.67, 3.44, 3.47, 3.43, 3.73, 3.46, 3.45, 3.51, 3.48, 3.72, 3.78, 3.82, 3.46, 3.73, 3.74, 3.45, 3.72, 3.48, 3.71, 3.47, 3.57, 3.73, 3.76, 3.47, 3.71, 3.51, 3.49, 3.44, 3.44, 3.83, 3.45, 3.73, 3.74, 3.46, 3.75, 3.49, 3.45, 3.52, 3.79, 3.71, 3.5, 3.51
+Average Time:       3.58
+Win Rate:           40/100 (40.00%)
+Record:             Win, Loss, Loss, Loss, Loss, Win, Loss, Win, Win, Loss, Loss, Win, Loss, Loss, Win, Loss, Win, Win, Loss, Loss, Loss, Win, Loss, Win, Loss, Loss, Loss, Loss, Win, Win, Win, Loss, Loss, Win, Win, Win, Win, Win, Loss, Loss, Win, Loss, Loss, Loss, Loss, Win, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Win, Loss, Loss, Win, Loss, Win, Loss, Loss, Loss, Win, Loss, Loss, Loss, Loss, Win, Win, Win, Loss, Win, Win, Loss, Win, Loss, Win, Loss, Loss, Win, Win, Loss, Win, Loss, Loss, Loss, Loss, Win, Loss, Win, Win, Loss, Win, Loss, Loss, Loss, Win, Win, Loss, Loss
+Scared Time:        10
+Num Simulations:    
+----------------------------------------
