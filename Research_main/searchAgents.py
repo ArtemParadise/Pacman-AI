@@ -557,7 +557,7 @@ class AStarCapsulesSearchAgent(SearchAgent):
         self.searchType = CapsulesSearchProblem
 
 class BFSCapsulesSearchAgent(SearchAgent):
-    "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
+    "A SearchAgent for CapsulesSearchProblem using BFS"
 
     def __init__(self):
         self.searchFunction = lambda prob: search.breadthFirstSearch(prob)

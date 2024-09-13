@@ -1,33 +1,10 @@
 import pacman
 from pacman import readCommand
 
-# constant_args = ['-l', 'originalClassic', '--zoom', 0.5]
-# constant_args = ['-l', 'bigMaze', '-p', 'GoWestAgent' '--zoom', 0.5]
-# constant_args = []
-n_experiments = '5'
-
-# Add Param for eatable ghosts after eating capsule
-
 # layout names from layouts directory
-# mazes = ['mediumClassicCaps', 'originalClassicCaps', 'powerClassic', 'bigSafeSearch']
-mazes = ['mediumClassicCaps', 'originalClassicCaps', 'bigSearchCaps', 'bigMazeCaps']
 # -g - Ghost Agent type, f. e. 'DirectionalGhost'
 # -n - number of games for 1 run, more info in pacman.py
 constant_args = ['-n', '1', '-g', 'DirectionalGhost', '--zoom', 0.5]
-# def run_mc_experiments():
-#     results = []
-#     for distance in range(1, 5):
-#         # -p - Pacman agents type from *Agents files, more info in pacman.py
-#         dynamic_params = ['-p', 'MonteCarloPacmanAgent', f'-a', f'optimal_distance={distance}']
-#         all_params = constant_args + dynamic_params
-#
-#         args = readCommand(all_params)
-#         games = pacman.runGames(**args)
-#
-#         score = sum([game.state.getScore() for game in games]) / len(games)
-#         time_in_game = len(games)
-#         results.append((distance, score, time_in_game))
-#     return results
 
 SM_MAZES = [
     ['-l', 'smallOptimised'], ### Small 1
@@ -47,9 +24,9 @@ XL_MAZES = [
 ]
 
 XL2_MAZES = [
-    ['-l', 'xlargeNonOptimized10w'], ### XLarge 2
+    # ['-l', 'xlargeNonOptimized10w'], ### XLarge 2
     ['-l', 'xlargeNonOptimized15w'], ### XLarge 2
-    ['-l', 'xlargeNonOptimized20w'], ### XLarge 2
+    # ['-l', 'xlargeNonOptimized20w'], ### XLarge 2
 ]
 
 # Add MCTS later
@@ -63,9 +40,6 @@ SM_PACMAN_AGENTS = [
     ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=30'],
     ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=50'],
     ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=75'],
-    # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=300'],
-    # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=400'],
-    # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=500'],
 ]
 
 # Big-Mazes
@@ -75,15 +49,12 @@ L_PACMAN_AGENTS = [
     # ['-p', 'AStarCapsulesSearchAgent'],
     # ['-p', 'CapsulesAlphaBetaAgent', '-a', 'evalFn=cbetter,depth=2'],
     # ['-p', 'CapsulesExpectimaxAgent', '-a', 'evalFn=cbetter,depth=1'], ## Redo on XLarge by 50 for 1 time
-    # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=10'],
-    # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=30'],
+    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=10'],
+    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=30'],
     ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=50'],
-    # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=75'],
-    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=101'],
-    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=200'],
-    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=300'],
-    # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=400'],
-    # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=500'],
+    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=75'],
+    # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=101'],
+    # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=200'],
 ]
 
 # Big-Mazes
@@ -93,10 +64,8 @@ XL_PACMAN_AGENTS = [
     # ['-p', 'CapsulesAlphaBetaAgent', '-a', 'evalFn=cbetter,depth=2'],
     # ['-p', 'CapsulesExpectimaxAgent', '-a', 'evalFn=cbetter,depth=1'],
     ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=50'],
-    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=101'],
-    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=200'],
-    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=300'],
-    # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=400'],
+    # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=101'],
+    # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=200'],
 ]
 
 DEFAULTS = ['-g', 'BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost', '-k', '6', '-z', '0.5', '-n', '100'] # Edit n TODO: remove -k param
@@ -118,37 +87,37 @@ def run_experiments():
     #         games_list.append(games)
 
     # L Mazes Games
-    for maze in L_MAZES:
-        for pacmanAgent in L_PACMAN_AGENTS:
-            params = pacmanAgent + maze + DEFAULTS
-            print('params -', params)
-            args = readCommand(params)
-
-            games = pacman.runGames(**args)
-
-            games_list.append(games)
-
-    # XL Mazes Games
-    for maze in XL_MAZES:
-        for pacmanAgent in XL_PACMAN_AGENTS:
-            params = pacmanAgent + maze + DEFAULTS
-            print('params -', params)
-            args = readCommand(params)
-
-            games = pacman.runGames(**args)
-
-            games_list.append(games)
-
-    # # XL2 Mazes Games
-    # for maze in XL2_MAZES:
-    #     for pacmanAgent in XL_PACMAN_AGENTS:
-    #         params = pacmanAgent + maze + XL2_DEFAULTS
+    # for maze in L_MAZES:
+    #     for pacmanAgent in L_PACMAN_AGENTS:
+    #         params = pacmanAgent + maze + DEFAULTS
     #         print('params -', params)
     #         args = readCommand(params)
-    #
+
     #         games = pacman.runGames(**args)
-    #
+
     #         games_list.append(games)
+
+    # XL Mazes Games
+    # for maze in XL_MAZES:
+    #     for pacmanAgent in XL_PACMAN_AGENTS:
+    #         params = pacmanAgent + maze + DEFAULTS
+    #         print('params -', params)
+    #         args = readCommand(params)
+
+    #         games = pacman.runGames(**args)
+
+    #         games_list.append(games)
+
+    # # XL2 Mazes Games
+    for maze in XL2_MAZES:
+        for pacmanAgent in XL_PACMAN_AGENTS:
+            params = pacmanAgent + maze + XL2_DEFAULTS
+            print('params -', params)
+            args = readCommand(params)
+    
+            games = pacman.runGames(**args)
+    
+            games_list.append(games)
 
     return games_list
 
