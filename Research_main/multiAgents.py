@@ -122,9 +122,6 @@ class MultiAgentSearchAgent(Agent):
     """
 
     def __init__(self, evalFn='scoreEvaluationFunction', depth='2', numSimulations='100'):
-        print("eval -", evalFn)
-        print("depth -", depth)
-        print("numSimulations -", numSimulations)
         self.index = 0  # Pacman is always agent index 0
         self.evaluationFunction = util.lookup(evalFn, globals())
         self.depth = int(depth)
@@ -391,7 +388,6 @@ class CapsulesExpectimaxAgent(MultiAgentSearchAgent):
 
         return totalValue / numAction
 
-
 class CapsulesAlphaBetaAgent(MultiAgentSearchAgent):
     """
     Alpha-Beta Pruning agent that uses the evaluation function specified via command line arguments.
@@ -466,7 +462,6 @@ class CapsulesAlphaBetaAgent(MultiAgentSearchAgent):
 
         return minValue
 
-
 def betterEvaluationFunction(currentGameState):
     """
       Your extreme ghost-hunting, pellet-nabbing, food-gobbling, unstoppable
@@ -504,9 +499,6 @@ def betterEvaluationFunction(currentGameState):
             return -INF  # Pacman is dead at this point
 
     return score
-
-# Abbreviation
-better = betterEvaluationFunction
 
 def capsulesEvaluationFunction(currentGameState):
     """
@@ -551,9 +543,6 @@ def capsulesEvaluationFunction(currentGameState):
 
     return score
 
-# Abbreviation
-cbetter = capsulesEvaluationFunction
-
 def capsulesEvaluationMCTSFunction(currentGameState):
     """
     Evaluation function that balances capsule consumption with ghost avoidance.
@@ -597,17 +586,16 @@ def capsulesEvaluationMCTSFunction(currentGameState):
 
     return score
 
-# Abbreviation
-mctsbetter = capsulesEvaluationMCTSFunction
-
 class MCTSAgentWithHeuristic(MultiAgentSearchAgent):
     """
     Monte Carlo Tree Search (MCTS) agent using a combined approach with both heuristic and evaluation function.
     """
 
-    def __init__(self, evalFn='capsulesEvaluationFunction', depth='2', numSimulations=300):
+    def __init__(self, evalFn='capsulesEvaluationFunction', depth='2', numSimulations=300, withEval=True):
         super().__init__(evalFn, depth)
-        self.numSimulations = numSimulations
+        self.numSimulations = int(numSimulations)
+        print("numSimulations -", self.numSimulations)
+        self.withEval = withEval
 
     def getAction(self, gameState):
         root = Node(gameState)
@@ -643,7 +631,10 @@ class MCTSAgentWithHeuristic(MultiAgentSearchAgent):
     def simulate(self, node):
         current_state = node.gameState
 
-        score = self.evaluationFunction(current_state)
+        score = 0
+        if self.withEval:
+            score = self.evaluationFunction(current_state)
+
         reward = self.heuristic(current_state) + score
 
         return reward
@@ -692,6 +683,13 @@ class MCTSAgentWithHeuristic(MultiAgentSearchAgent):
 
         return ghost_penalty + capsule_reward + food_reward
 
+class MCTSAgentWithoutEval(MCTSAgentWithHeuristic):
+    """
+    Monte Carlo Tree Search (MCTS) agent using only heuristic without combination with evaluation function.
+    """
+
+    def __init__(self, evalFn='capsulesEvaluationFunction', depth='2', numSimulations=300, withEval=False):
+        super().__init__(evalFn, depth, numSimulations, withEval)
 
 class Node:
     def __init__(self, gameState, parent=None, action=None):
@@ -715,3 +713,7 @@ class Node:
         return [action for action in self.gameState.getLegalActions(0) if
                 action not in [child.action for child in self.children]]
 
+# Abbreviations
+better = betterEvaluationFunction
+cbetter = capsulesEvaluationFunction
+mctsbetter = capsulesEvaluationMCTSFunction

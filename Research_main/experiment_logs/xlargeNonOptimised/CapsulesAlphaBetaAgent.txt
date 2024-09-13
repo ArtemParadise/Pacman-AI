@@ -1,0 +1,24 @@
+Maze Name:          xlargeNonOptimised
+Pacman Agent Type:  CapsulesAlphaBetaAgent
+Number of Games:    1
+Average Score:      1109.00
+Scores:             1109.0
+Times:              52.56
+Average Time:       52.56
+Win Rate:           0/1 (0.00%)
+Record:             Loss
+Scared Time:        10
+Num Simulations:    
+----------------------------------------
+Maze Name:          xlargeNonOptimised
+Pacman Agent Type:  CapsulesAlphaBetaAgent
+Number of Games:    100
+Average Score:      1577.11
+Scores:             2101.0, 1851.0, 1173.0, 894.0, 780.0, 789.0, 804.0, 2253.0, 947.0, 872.0, 1963.0, 917.0, 1371.0, 1203.0, 925.0, 1959.0, 800.0, 1010.0, 935.0, 2155.0, 5124.0, 1135.0, 1920.0, 802.0, 1347.0, 1828.0, 1018.0, 824.0, 1928.0, 1003.0, 907.0, 2201.0, 918.0, 1506.0, 1007.0, 1091.0, 4692.0, 1722.0, 1269.0, 3102.0, 1972.0, 2524.0, 1870.0, 948.0, 1981.0, 802.0, 742.0, 1804.0, 769.0, 1181.0, 3356.0, 3389.0, 2779.0, 2089.0, 2578.0, 1206.0, 1405.0, 1966.0, 1265.0, 2687.0, 917.0, 2147.0, 1947.0, 872.0, 810.0, 1979.0, 814.0, 1949.0, 1236.0, 1257.0, 1889.0, 859.0, 2518.0, 919.0, 1932.0, 1963.0, 785.0, 1392.0, 4159.0, 939.0, 1767.0, 1379.0, 929.0, 752.0, 805.0, 946.0, 1268.0, 1276.0, 1349.0, 1039.0, 1884.0, 2362.0, 1486.0, 927.0, 804.0, 1834.0, 3254.0, 2134.0, 1098.0, 776.0
+Times:              80.76, 65.34, 37.87, 31.02, 22.29, 31.39, 25.28, 80.09, 28.98, 26.19, 61.84, 27.72, 43.12, 45.47, 18.34, 70.98, 27.95, 37.81, 30.11, 84.63, 122.87, 30.13, 75.48, 25.77, 41.9, 88.16, 31.32, 25.41, 63.68, 36.93, 28.32, 71.15, 28.1, 59.09, 34.1, 25.82, 118.38, 56.14, 56.6, 143.83, 65.91, 74.01, 73.44, 32.73, 65.95, 26.07, 20.71, 60.4, 21.34, 64.92, 59.5, 120.05, 71.05, 79.36, 120.14, 89.61, 50.08, 82.02, 53.24, 84.75, 28.76, 80.25, 87.28, 24.41, 27.66, 67.93, 26.09, 70.65, 30.95, 48.85, 76.38, 28.76, 83.93, 27.21, 84.54, 60.32, 25.38, 45.23, 99.11, 27.16, 69.42, 44.08, 21.47, 20.41, 25.03, 32.96, 35.7, 45.57, 38.2, 36.47, 83.65, 85.84, 58.74, 29.18, 30.08, 126.27, 68.64, 120.35, 28.15, 35.78
+Average Time:       54.42
+Win Rate:           0/100 (0.00%)
+Record:             Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss
+Scared Time:        10
+Num Simulations:    
+----------------------------------------

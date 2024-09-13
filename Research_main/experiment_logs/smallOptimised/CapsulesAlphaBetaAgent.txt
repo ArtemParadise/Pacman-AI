@@ -1,0 +1,35 @@
+Maze Name:          smallOptimised
+Pacman Agent Type:  CapsulesAlphaBetaAgent
+Number of Games:    3
+Average Score:      1559.67
+Scores:             1079.0, 1805.0, 1795.0
+Times:              6.91, 10.01, 10.22
+Average Time:       9.05
+Win Rate:           2/3 (66.67%)
+Record:             Loss, Win, Win
+Scared Time:        20
+----------------------------------------
+Maze Name:          smallOptimised
+Pacman Agent Type:  CapsulesAlphaBetaAgent
+Number of Games:    1
+Average Score:      1043.00
+Scores:             1043.0
+Times:              6.24
+Average Time:       6.24
+Win Rate:           0/1 (0.00%)
+Record:             Loss
+Scared Time:        10
+Num Simulations:    
+----------------------------------------
+Maze Name:          smallOptimised
+Pacman Agent Type:  CapsulesAlphaBetaAgent
+Number of Games:    100
+Average Score:      1272.29
+Scores:             1047.0, 1269.0, 1469.0, 1471.0, 852.0, 852.0, 1480.0, 847.0, 1479.0, 1480.0, 1469.0, 1479.0, 1319.0, 1471.0, 1319.0, 1471.0, 1044.0, 1319.0, 1480.0, 1479.0, 689.0, 1471.0, 1477.0, 847.0, 1471.0, 1116.0, 1048.0, 1469.0, 1471.0, 1477.0, 860.0, 1681.0, 1480.0, 1318.0, 1480.0, 707.0, 1469.0, 847.0, 1050.0, 1683.0, 1469.0, 1091.0, 1477.0, 699.0, 852.0, 1471.0, 1672.0, 847.0, 1469.0, 1480.0, 1765.0, 1047.0, 1469.0, 1269.0, 1681.0, 1479.0, 899.0, 1469.0, 1319.0, 1269.0, 1656.0, 1479.0, 1658.0, 1048.0, 1471.0, 1049.0, 1480.0, 1683.0, 1656.0, 1072.0, 1577.0, 1469.0, 1471.0, 845.0, 1044.0, 1269.0, 1046.0, 1683.0, 837.0, 860.0, 1319.0, 1044.0, 1469.0, 1477.0, 1269.0, 1078.0, 1318.0, 1114.0, 1047.0, 1469.0, 847.0, 1477.0, 1471.0, 1048.0, 1577.0, 852.0, 847.0, 847.0, 1046.0, 860.0
+Times:              5.76, 6.85, 6.86, 6.61, 5.01, 5.05, 8.11, 5.68, 6.9, 8.17, 6.9, 8.33, 8.29, 6.62, 8.26, 6.64, 6.21, 8.31, 8.14, 6.86, 9.67, 6.64, 8.55, 5.74, 6.61, 7.26, 5.6, 6.85, 6.54, 8.61, 5.28, 8.05, 8.24, 8.44, 8.09, 9.98, 6.91, 5.78, 6.77, 7.86, 6.86, 5.22, 8.61, 8.36, 5.06, 6.6, 7.92, 5.77, 6.87, 8.11, 10.31, 5.82, 6.87, 6.88, 8.12, 6.85, 6.96, 6.92, 8.26, 6.91, 8.85, 6.84, 8.51, 5.66, 6.58, 6.95, 8.17, 7.7, 8.68, 9.31, 8.64, 6.88, 6.62, 6.01, 6.17, 6.91, 5.92, 7.57, 5.7, 5.17, 8.18, 6.18, 6.84, 8.64, 6.88, 7.03, 8.49, 7.66, 5.74, 6.91, 5.74, 8.62, 6.61, 5.68, 8.63, 5.07, 5.71, 5.73, 5.94, 5.35
+Average Time:       7.09
+Win Rate:           62/100 (62.00%)
+Record:             Loss, Win, Win, Win, Loss, Loss, Win, Loss, Win, Win, Win, Win, Win, Win, Win, Win, Loss, Win, Win, Win, Loss, Win, Win, Loss, Win, Loss, Loss, Win, Win, Win, Loss, Win, Win, Win, Win, Loss, Win, Loss, Loss, Win, Win, Loss, Win, Loss, Loss, Win, Win, Loss, Win, Win, Win, Loss, Win, Win, Win, Win, Loss, Win, Win, Win, Win, Win, Win, Loss, Win, Loss, Win, Win, Win, Loss, Win, Win, Win, Loss, Loss, Win, Loss, Win, Loss, Loss, Win, Loss, Win, Win, Win, Loss, Win, Loss, Loss, Win, Loss, Win, Win, Loss, Win, Loss, Loss, Loss, Loss, Loss
+Scared Time:        10
+Num Simulations:    
+----------------------------------------

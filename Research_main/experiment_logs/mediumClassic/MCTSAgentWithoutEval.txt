@@ -1,0 +1,11 @@
+Maze Name:          mediumClassic
+Pacman Agent Type:  MCTSAgentWithoutEval
+Number of Games:    2
+Average Score:      120.50
+Scores:             120.0, 121.0
+Times:              17.01, 8.78
+Average Time:       12.89
+Win Rate:           0/2 (0.00%)
+Record:             Loss, Loss
+Scared Time:        10
+----------------------------------------

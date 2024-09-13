@@ -1,65 +1,145 @@
 import pacman
 from pacman import readCommand
 
-# constant_args = ['-l', 'originalClassic', '--zoom', 0.5]
-# constant_args = ['-l', 'bigMaze', '-p', 'GoWestAgent' '--zoom', 0.5]
-# constant_args = []
-n_experiments = '5'
-
-# Add Param for eatable ghosts after eating capsule
-
 # layout names from layouts directory
-# mazes = ['mediumClassicCaps', 'originalClassicCaps', 'powerClassic', 'bigSafeSearch']
-mazes = ['mediumClassicCaps', 'originalClassicCaps', 'bigSearchCaps', 'bigMazeCaps']
 # -g - Ghost Agent type, f. e. 'DirectionalGhost'
 # -n - number of games for 1 run, more info in pacman.py
 constant_args = ['-n', '1', '-g', 'DirectionalGhost', '--zoom', 0.5]
-def run_mc_experiments():
-    results = []
-    for distance in range(1, 5):
-        # -p - Pacman agents type from *Agents files, more info in pacman.py
-        dynamic_params = ['-p', 'MonteCarloPacmanAgent', f'-a', f'optimal_distance={distance}']
-        all_params = constant_args + dynamic_params
 
-        args = readCommand(all_params)
-        games = pacman.runGames(**args)
+SM_MAZES = [
+    ['-l', 'smallOptimised'], ### Small 1
+    ['-l', 'smallNonOptimised'], ### Small 2 ## redo for AlphaBeta and Expectimax
+    ['-l', 'mediumClassic'], ### Medium 1
+    ['-l', 'mediumNonOptimized'], ### Medium 2
+]
 
-        score = sum([game.state.getScore() for game in games]) / len(games)
-        time_in_game = len(games)
-        results.append((distance, score, time_in_game))
-    return results
+L_MAZES = [
+    ['-l', 'originalClassic'], ### Large 1
+    ['-l', 'largeNonOptimised'], ### Large 2
+]
 
-def run_experiments(agentType):
-    results_list = []
+# Make additionally 4 ghosts 4 goals
+XL_MAZES = [
+    ['-l', 'xlargeNonOptimised'], ### XLarge 1
+]
 
-    for mazeType in mazes:
-        dynamic_params = ['-p', agentType, '-l', mazeType]
-        all_params = constant_args + dynamic_params
-        args = readCommand(all_params)
-        games = pacman.runGames(**args)
+XL2_MAZES = [
+    # ['-l', 'xlargeNonOptimized10w'], ### XLarge 2
+    ['-l', 'xlargeNonOptimized15w'], ### XLarge 2
+    # ['-l', 'xlargeNonOptimized20w'], ### XLarge 2
+]
 
-        results_list.append({mazeType: [game.state.getScore() for game in games]})
+# Add MCTS later
+SM_PACMAN_AGENTS = [
+    # ['-p', 'RandomAgent'],
+    # ['-p', 'BFSCapsulesSearchAgent'],
+    # ['-p', 'AStarCapsulesSearchAgent'],
+    # ['-p', 'CapsulesAlphaBetaAgent', '-a', 'evalFn=cbetter,depth=2'],
+    # ['-p', 'CapsulesExpectimaxAgent', '-a', 'evalFn=cbetter,depth=2'],
+    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=10'],
+    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=30'],
+    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=50'],
+    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=75'],
+]
 
-    return results_list
+# Big-Mazes
+L_PACMAN_AGENTS = [
+    # ['-p', 'RandomAgent'],
+    # ['-p', 'BFSCapsulesSearchAgent'],
+    # ['-p', 'AStarCapsulesSearchAgent'],
+    # ['-p', 'CapsulesAlphaBetaAgent', '-a', 'evalFn=cbetter,depth=2'],
+    # ['-p', 'CapsulesExpectimaxAgent', '-a', 'evalFn=cbetter,depth=1'], ## Redo on XLarge by 50 for 1 time
+    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=10'],
+    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=30'],
+    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=50'],
+    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=75'],
+    # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=101'],
+    # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=200'],
+]
+
+# Big-Mazes
+# Try MCTS for 100 simulations
+XL_PACMAN_AGENTS = [
+    # ['-p', 'RandomAgent'],
+    # ['-p', 'CapsulesAlphaBetaAgent', '-a', 'evalFn=cbetter,depth=2'],
+    # ['-p', 'CapsulesExpectimaxAgent', '-a', 'evalFn=cbetter,depth=1'],
+    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=50'],
+    # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=101'],
+    # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=200'],
+]
+
+DEFAULTS = ['-g', 'BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost', '-k', '6', '-z', '0.5', '-n', '100'] # Edit n TODO: remove -k param
+XL1_DEFAULTS = ['-g', 'BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost', '-k', '6', '-z', '0.5', '-n', '100'] # Edit n
+XL2_DEFAULTS = ['-g', 'BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost', '-z', '0.5', '-n', '100'] # Edit n
+
+def run_experiments():
+    games_list = []
+
+    # # SM Mazes Games
+    # for maze in SM_MAZES:
+    #     for pacmanAgent in SM_PACMAN_AGENTS:
+    #         params = pacmanAgent + maze + DEFAULTS
+    #         print('params -', params)
+    #         args = readCommand(params)
+    #
+    #         games = pacman.runGames(**args)
+    #
+    #         games_list.append(games)
+
+    # L Mazes Games
+    # for maze in L_MAZES:
+    #     for pacmanAgent in L_PACMAN_AGENTS:
+    #         params = pacmanAgent + maze + DEFAULTS
+    #         print('params -', params)
+    #         args = readCommand(params)
+
+    #         games = pacman.runGames(**args)
+
+    #         games_list.append(games)
+
+    # XL Mazes Games
+    # for maze in XL_MAZES:
+    #     for pacmanAgent in XL_PACMAN_AGENTS:
+    #         params = pacmanAgent + maze + DEFAULTS
+    #         print('params -', params)
+    #         args = readCommand(params)
+
+    #         games = pacman.runGames(**args)
+
+    #         games_list.append(games)
+
+    # # XL2 Mazes Games
+    for maze in XL2_MAZES:
+        for pacmanAgent in XL_PACMAN_AGENTS:
+            params = pacmanAgent + maze + XL2_DEFAULTS
+            print('params -', params)
+            args = readCommand(params)
+    
+            games = pacman.runGames(**args)
+    
+            games_list.append(games)
+
+    return games_list
 
 if __name__ == '__main__':
-    random_results = run_experiments('RandomPacmanAgent')
-    go_lt_results = run_experiments('LeftTurnAgent')
-    monte_carlo_results = run_mc_experiments()
-    # go_sa_results = run_experiments('SearchAgent')
-    # go_psp_results = run_experiments('PositionSearchProblem')
+    allGames = run_experiments()
 
-    print("Random Results:", random_results)
-    print("Left Turn Results:", go_lt_results)
-    print("Monte Carlo Results:", monte_carlo_results)
-    # print("SearchAgent Results:", go_sa_results)
-    # print("PositionSearchProblem Results:", go_psp_results)
-
+    print("Experiments Finished:", allGames)
 
 # Наброски
 # print('Path found with total cost of %d in %.1f seconds' % (totalCost, time.time() - starttime))
         # if '_expanded' in dir(problem): print('Search nodes expanded: %d' % problem._expanded)
+
 # Setups
+## Random
+### Small1 -> python3 pacman.py -l smallOptimised -p RandomAgent -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost
+### Small2 -> python3 pacman.py -l smallNonOptimised -p RandomAgent -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost
+### Medium1 -> python3 pacman.py -l mediumClassic -p RandomAgent -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost
+### Medium2 -> python3 pacman.py -l mediumNonOptimized -p RandomAgent -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost
+### Large 1 -> python3 pacman.py -l originalClassic -p RandomAgent -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost -z 0.5
+### Large 2 -> python3 pacman.py -l largeNonOptimised -p RandomAgent -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost -z 0.5
+### XLarge -> python3 pacman.py -l xlargeNonOptimised -p RandomAgent -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost -z 0.5
+
 # python3 pacman.py -l originalClassicCaps -p SearchAgent -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost -a fn=bfs,prob=CapsulesSearchProblem -z 0.5
 # python3 pacman.py -l mediumClassicCaps -p SearchAgent -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost -a fn=bfs,prob=CapsulesSearchProblem -z 0.5
 # python3 pacman.py -l mediumClassicCaps -p AStarCapsulesSearchAgent -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost -z 0.5 -n 5
@@ -70,6 +150,16 @@ if __name__ == '__main__':
 # python3 pacman.py -p CapsulesAlphaBetaAgent -a evalFn=cbetter,depth=2 -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost  -l originalClassic
 # python3 pacman.py -p CapsulesExpectimaxAgent -a evalFn=cbetter,depth=2 -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost  -l mediumClassic
 
+# MCTS runs
+# python3 pacman.py -p MCTSAgentWithHeuristic -a evalFn=mctsbetter -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost -l mediumClassic -n 3
+# python3 pacman.py -p MCTSAgentWithHeuristic -a evalFn=mctsbetter -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost -l originalClassic -n 3
+
+
+# XL Maze check
+# python3 pacman.py -l xlargeNonOptimised -p CapsulesAlphaBetaAgent -a evalFn=cbetter,depth=2 -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost -z 0.5
+# python3 pacman.py -l xlargeNonOptimised -p CapsulesExpectimaxAgent -a evalFn=cbetter,depth=1 -g BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost -z 0.5
+
+
 # Potential performance Diferences
 ## - depth
 ## - layouts
@@ -77,3 +167,7 @@ if __name__ == '__main__':
 
 # SCARED_TIME
 # TIME_PENALTY = 1  # Number of points lost each round
+
+# Further experiments improvements
+# Ghosts eaten number
+# Goals achieved count

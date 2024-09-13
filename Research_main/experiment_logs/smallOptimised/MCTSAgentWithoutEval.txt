@@ -1,0 +1,11 @@
+Maze Name:          smallOptimised
+Pacman Agent Type:  MCTSAgentWithoutEval
+Number of Games:    2
+Average Score:      67.00
+Scores:             67.0, 67.0
+Times:              4.66, 4.34
+Average Time:       4.5
+Win Rate:           0/2 (0.00%)
+Record:             Loss, Loss
+Scared Time:        10
+----------------------------------------
