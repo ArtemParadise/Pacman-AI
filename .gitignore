@@ -1,2 +1,9 @@
-/Research_main/.idea/
-/.idea/*
+.idea
+*/.idea
+*/__pycache__
+.vscode/settings.json
+PJ1_search/grading.pyc
+PJ1_search/pacman.pyc
+PJ1_search/projectParams.pyc
+PJ1_search/searchAgents.pyc
+PJ1_search/util.pyc
