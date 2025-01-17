@@ -10,7 +10,7 @@ class ExperimentLogger:
         self.log_file = log_file
         self.data = []
 
-    def log(self, layout, pacman, numGames, scores, times, wins, SCARED_TIME, numSimulations):
+    def log(self, layout, pacman, numGames, scores, times, wins, SCARED_TIME, modelName, numSimulations):
         average_score = sum(scores) / float(len(scores))
         average_time = sum(times) / float(len(times))
         winRate = (wins.count(True) / len(wins)) * 100
@@ -27,6 +27,7 @@ class ExperimentLogger:
             f"Record:             {', '.join([['Loss', 'Win'][int(w)] for w in wins])}\n"
             f"Scared Time:        {SCARED_TIME}\n"
             f"Num Simulations:    {numSimulations}\n"
+            f"Ghosts Model:       {modelName}\n"
             "----------------------------------------\n"
         )
 

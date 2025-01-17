@@ -51,12 +51,17 @@ class RandomGhost(GhostAgent):
 
 class NeuralNetworkGhost(GhostAgent):
 
-    def __init__(self, index, checkpoint_dir = 'smallClassic'):
+    def __init__(self, index, modelName = 'test-tag2'):
         super().__init__(index)
         self.PACMAN_ACTIONS = [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST, Directions.STOP]
-        # self.num_inputs = 572 # Small
-        self.num_inputs = 572
+        self.num_inputs = 572 # Small
+        # self.num_inputs = 912 # SM
+        # self.num_inputs = 892 # Medium 1
+        # self.num_inputs = 848 # Medium 2
         self.num_outputs = 5
+
+        print("Model to control Ghost: ", modelName)
+        checkpoint_dir = '/models/' + modelName
 
         self.model = self.build_model(self.num_inputs, self.num_outputs)
 
