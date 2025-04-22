@@ -7,10 +7,20 @@ from pacman import readCommand
 constant_args = ['-n', '1', '-g', 'DirectionalGhost', '--zoom', 0.5]
 
 SM_MAZES = [
-    ['-l', 'smallOptimised'], ### Small 1
-    ['-l', 'smallNonOptimised'], ### Small 2 ## redo for AlphaBeta and Expectimax
-    ['-l', 'mediumClassic'], ### Medium 1
-    ['-l', 'mediumNonOptimized'], ### Medium 2
+    # ['-l', 'smallOptimised'], ### Small 1
+    # ['-l', 'smallNonOptimised'], ### Small 2
+    # ['-l', 'smallNonOptimized10w'], ### S 10w
+    # ['-l', 'smallNonOptimized20w'], ### S 20w
+    # ['-l', 'smallNonOptimized25w'], ### S 25w
+    # ['-l', 'smallNonOptimized30w'], ### S 30w
+    ['-l', 'smallNonOptimized40w'], ### S 40w
+    # ['-l', 'smNonOptimized10w'], ### SM 10w
+    # ['-l', 'smNonOptimized20w'], ### SM 10w
+    # ['-l', 'smNonOptimized25w'], ### SM 10w
+    # ['-l', 'smNonOptimized30w'], ### SM 10w
+    # ['-l', 'smNonOptimized40w'], ### SM 10w
+    # ['-l', 'mediumClassic'], ### Medium 1
+    # ['-l', 'mediumNonOptimized'], ### Medium 2
 ]
 
 L_MAZES = [
@@ -33,13 +43,13 @@ XL2_MAZES = [
 SM_PACMAN_AGENTS = [
     # ['-p', 'RandomAgent'],
     # ['-p', 'BFSCapsulesSearchAgent'],
-    # ['-p', 'AStarCapsulesSearchAgent'],
+    ['-p', 'AStarCapsulesSearchAgent'],
     # ['-p', 'CapsulesAlphaBetaAgent', '-a', 'evalFn=cbetter,depth=2'],
     # ['-p', 'CapsulesExpectimaxAgent', '-a', 'evalFn=cbetter,depth=2'],
-    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=10'],
-    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=30'],
-    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=50'],
-    ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=75'],
+    # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=10'],
+    # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=30'],
+    # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=50'],
+    # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=75'],
 ]
 
 # Big-Mazes
@@ -68,7 +78,9 @@ XL_PACMAN_AGENTS = [
     # ['-p', 'MCTSAgentWithHeuristic', '-a', 'evalFn=mctsbetter,numSimulations=200'],
 ]
 
-DEFAULTS = ['-g', 'BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost', '-k', '6', '-z', '0.5', '-n', '100'] # Edit n TODO: remove -k param
+# DEFAULTS = ['-g', 'NeuralNetworkGhost', '-k', '2', '-z', '0.5', '-n', '100', '-m', 'test-tag2', '--fixRandomSeed'] # Edit n TODO: remove -k param
+DEFAULTS = ['-g', 'BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost', '-k', '2', '-z', '0.5', '-n', '100', '--fixRandomSeed'] # Edit n TODO: remove -k param
+# DEFAULTS = ['-g', 'NeuralNetworkGhost,NeuralNetworkGhost,NeuralNetworkGhost,NeuralNetworkGhost', '-k', '6', '-z', '0.5', '-n', '100'] # Edit n TODO: remove -k param
 XL1_DEFAULTS = ['-g', 'BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost', '-k', '6', '-z', '0.5', '-n', '100'] # Edit n
 XL2_DEFAULTS = ['-g', 'BlinkyGhost,PinkyGhost,InkyGhost,ClydeGhost', '-z', '0.5', '-n', '100'] # Edit n
 
@@ -76,15 +88,16 @@ def run_experiments():
     games_list = []
 
     # # SM Mazes Games
-    # for maze in SM_MAZES:
-    #     for pacmanAgent in SM_PACMAN_AGENTS:
-    #         params = pacmanAgent + maze + DEFAULTS
-    #         print('params -', params)
-    #         args = readCommand(params)
-    #
-    #         games = pacman.runGames(**args)
-    #
-    #         games_list.append(games)
+    for maze in SM_MAZES:
+        for pacmanAgent in SM_PACMAN_AGENTS:
+            params = pacmanAgent + maze + DEFAULTS
+            print('params -', params)
+            args = readCommand(params)
+
+            print('Args -', args)
+            games = pacman.runGames(**args)
+
+            games_list.append(games)
 
     # L Mazes Games
     # for maze in L_MAZES:
@@ -109,15 +122,15 @@ def run_experiments():
     #         games_list.append(games)
 
     # # XL2 Mazes Games
-    for maze in XL2_MAZES:
-        for pacmanAgent in XL_PACMAN_AGENTS:
-            params = pacmanAgent + maze + XL2_DEFAULTS
-            print('params -', params)
-            args = readCommand(params)
-    
-            games = pacman.runGames(**args)
-    
-            games_list.append(games)
+    # for maze in XL2_MAZES:
+    #     for pacmanAgent in XL_PACMAN_AGENTS:
+    #         params = pacmanAgent + maze + XL2_DEFAULTS
+    #         print('params -', params)
+    #         args = readCommand(params)
+    #
+    #         games = pacman.runGames(**args)
+    #
+    #         games_list.append(games)
 
     return games_list
 
@@ -125,10 +138,6 @@ if __name__ == '__main__':
     allGames = run_experiments()
 
     print("Experiments Finished:", allGames)
-
-# Наброски
-# print('Path found with total cost of %d in %.1f seconds' % (totalCost, time.time() - starttime))
-        # if '_expanded' in dir(problem): print('Search nodes expanded: %d' % problem._expanded)
 
 # Setups
 ## Random

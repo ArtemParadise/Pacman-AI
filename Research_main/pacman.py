@@ -522,7 +522,14 @@ def parseGhosts(options, noKeyboard, numGhosts):
 
     for i, ghostType in enumerate(ghostTypes):
         ghostClass = loadAgent(ghostType, noKeyboard)
-        ghostAgents.append(ghostClass(i + 1))
+
+        # Check if the ghost class accepts a model parameter
+        try:
+            # Try to create ghost with both index and model
+            ghostAgents.append(ghostClass(i + 1, options.model))
+        except TypeError:
+            # If that fails, create ghost with just the index
+            ghostAgents.append(ghostClass(i + 1))
 
     return ghostAgents
 
@@ -576,6 +583,8 @@ def readCommand(argv):
                       help='Turns on exception handling and timeouts during games', default=False)
     parser.add_option('--timeout', dest='timeout', type='int',
                       help=default('Maximum length of time an agent can spend computing in a single game'), default=30)
+    parser.add_option('-m', '--model', dest='model',
+                      help=default('the Model path in /model folder from which to load the model'), default='Not used')
 
     options, otherjunk = parser.parse_args(argv)
     if len(otherjunk) != 0:
@@ -633,6 +642,7 @@ def readCommand(argv):
     args['timeout'] = options.timeout
     args['layoutName'] = options.layout
     args['pacmanAgentType'] = options.pacman
+    args['modelName'] = options.model
 
     if 'numSimulations' in agentOpts:
         args['numSimulations'] = agentOpts['numSimulations']
@@ -700,7 +710,7 @@ def replayGame(layout, actions, display):
 
     display.finish()
 
-def runGames(layout, pacman, ghosts, display, numGames, record, numTraining=0, catchExceptions=False, timeout=30, layoutName='', pacmanAgentType='', numSimulations=''):
+def runGames(layout, pacman, ghosts, display, numGames, record, numTraining=0, catchExceptions=False, timeout=30, layoutName='', pacmanAgentType='', modelName='', numSimulations=''):
     import __main__
     import time
     __main__.__dict__['_display'] = display
@@ -767,7 +777,7 @@ def runGames(layout, pacman, ghosts, display, numGames, record, numTraining=0, c
         print('Record:          ', ', '.join([['Loss', 'Win'][int(w)] for w in wins]))
         print('Scared Time:     ', SCARED_TIME)
 
-        logger.log(layoutName, pacmanAgentType, numGames, scores, times, wins, SCARED_TIME, numSimulations)
+        logger.log(layoutName, pacmanAgentType, numGames, scores, times, wins, SCARED_TIME, modelName, numSimulations)
 
     return games
 

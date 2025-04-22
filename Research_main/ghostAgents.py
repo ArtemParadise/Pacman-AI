@@ -18,6 +18,9 @@ from game import Directions
 import random
 from util import manhattanDistance, Counter
 import util
+import numpy as np
+import tensorflow as tf
+from tensorflow.python.keras import layers, models
 
 class GhostAgent(Agent):
     def __init__(self, index):
@@ -45,6 +48,111 @@ class RandomGhost(GhostAgent):
         dist.normalize()
         return dist
 
+
+class NeuralNetworkGhost(GhostAgent):
+
+    def __init__(self, index, modelName = 'test-tag2'):
+        super().__init__(index)
+        self.PACMAN_ACTIONS = [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST, Directions.STOP]
+        self.num_inputs = 572 # Small
+        # self.num_inputs = 912 # SM
+        # self.num_inputs = 892 # Medium 1
+        # self.num_inputs = 848 # Medium 2
+        self.num_outputs = 5
+
+        print("Model to control Ghost: ", modelName)
+        checkpoint_dir = '/models/' + modelName
+
+        self.model = self.build_model(self.num_inputs, self.num_outputs)
+
+        checkpoint = tf.train.Checkpoint(model=self.model)
+        status = checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir))
+        print("Model successfully restored: ", status)
+
+    def build_model(self, num_inputs, num_outputs, num_units=64):
+        model = tf.keras.Sequential([
+            tf.keras.layers.Dense(num_units, activation='relu', input_shape=(num_inputs,)),
+            tf.keras.layers.Dense(num_units, activation='relu'),
+            tf.keras.layers.Dense(num_outputs, activation=None)
+        ])
+        return model
+
+    def getDistribution(self, state):
+        obs = self.stateToObservation(state)
+
+        action_probs = self.model.predict(np.array([obs]))[0]
+
+        dist = util.Counter()
+        legalActions = state.getLegalActions(self.index)
+        for i, action in enumerate(self.PACMAN_ACTIONS):
+            if action in legalActions:
+                dist[action] = action_probs[i]
+
+        dist.normalize()
+        return dist
+
+    def stateToObservation(self, state):
+        debug = False
+
+
+        agent_states = state.data.agentStates
+        thisAgent = agent_states[self.index]
+        pacman_state = agent_states[0]
+
+        velocities = []
+        one_hot_vel = []
+        scared_array = []
+
+        for i, agent in enumerate(agent_states):
+            velocity_index = self.PACMAN_ACTIONS.index(agent.configuration.direction)
+            velocities.append(velocity_index)
+            if i != 0:
+                scared_array.append(int(agent.scaredTimer > 0))
+
+        for i in velocities:
+            one_hot = [0] * len(self.PACMAN_ACTIONS)
+            one_hot[i] = 1
+            one_hot_vel.extend(one_hot)
+
+        one_hot_vel = np.array(one_hot_vel)[:10]
+
+        width, height = state.data.layout.width, state.data.layout.height
+        all_agent_grid_full = []
+
+        for x in range(width):
+            for y in range(height):
+                if (x, y) in state.data.food:
+                    all_agent_grid_full.append(1)
+                else:
+                    all_agent_grid_full.append(0)
+
+        all_agent_grid_full = np.array(all_agent_grid_full)
+
+        wall_full = np.asarray(
+            [1 if state.data.layout.walls[x][y] else 0 for x in range(width) for y in range(height)]
+        )
+
+        food_full = np.asarray(
+            [1 if (x, y) in state.data.food else 0 for x in range(width) for y in range(height)]
+        )
+
+        capsule_full = np.asarray(
+            [1 if (x, y) in state.data.capsules else 0 for x in range(width) for y in range(height)]
+        )
+
+        observation = np.concatenate((
+            all_agent_grid_full,
+            one_hot_vel,
+            capsule_full,
+            food_full,
+            wall_full,
+            scared_array[:10]
+        ))
+
+        if debug:
+            print("United observation: ", observation)
+
+        return observation
 
 class DirectionalGhost(GhostAgent):
     "A ghost that prefers to rush Pacman, or flee when scared."

@@ -1,0 +1,13 @@
+Maze Name:          smNonOptimized25w
+Pacman Agent Type:  RandomAgent
+Number of Games:    100
+Average Score:      54.37
+Scores:             31.0, 51.0, 70.0, 59.0, 55.0, 39.0, 48.0, 69.0, 33.0, 41.0, 22.0, 31.0, 22.0, 41.0, 13.0, 44.0, 79.0, 66.0, 20.0, 47.0, 42.0, 25.0, 61.0, 43.0, 53.0, 50.0, 60.0, 39.0, 40.0, 76.0, 19.0, 81.0, 82.0, 59.0, 29.0, 69.0, 21.0, 70.0, 31.0, 52.0, 61.0, 773.0, 42.0, 37.0, 32.0, 48.0, 58.0, 51.0, 88.0, 31.0, 21.0, 29.0, 33.0, 59.0, 21.0, 111.0, 75.0, 33.0, 43.0, 56.0, 43.0, 41.0, 11.0, 42.0, 68.0, 115.0, 43.0, 31.0, 84.0, 43.0, 50.0, 48.0, 47.0, 32.0, 61.0, 38.0, 21.0, 39.0, 42.0, 43.0, 33.0, 66.0, 57.0, 44.0, 21.0, 21.0, 39.0, 66.0, 42.0, 38.0, 50.0, 67.0, 40.0, 42.0, 59.0, 40.0, 50.0, 33.0, 60.0, 42.0
+Times:              2.24, 2.26, 2.41, 2.54, 3.04, 2.53, 2.65, 3.85, 1.96, 2.24, 2.1, 2.27, 2.13, 2.27, 3.32, 1.87, 2.52, 2.93, 2.37, 2.8, 2.13, 3.03, 3.59, 1.98, 1.99, 2.36, 2.36, 3.86, 2.39, 2.92, 2.53, 3.61, 3.51, 2.54, 2.65, 2.51, 2.26, 2.42, 2.24, 3.46, 2.23, 3.32, 2.1, 2.78, 2.13, 2.66, 2.64, 2.22, 2.62, 2.33, 2.26, 2.52, 1.97, 2.52, 2.23, 3.57, 3.03, 1.98, 2.0, 2.92, 1.97, 2.3, 2.37, 2.21, 2.65, 3.07, 1.98, 2.25, 3.23, 2.0, 2.38, 2.65, 2.79, 2.12, 2.28, 2.69, 2.29, 2.54, 2.12, 2.01, 1.99, 2.92, 2.78, 1.85, 2.25, 2.24, 2.52, 2.96, 2.1, 2.62, 2.41, 2.77, 2.37, 2.1, 2.53, 2.37, 2.38, 1.98, 2.32, 2.12
+Average Time:       2.5
+Win Rate:           0/100 (0.00%)
+Record:             Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss, Loss
+Scared Time:        10
+Num Simulations:    
+Ghosts Model:       Not used
+----------------------------------------
